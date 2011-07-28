@@ -23,27 +23,15 @@
 	system specific I/O primitives are found in a different file.
 */
 
-# include <stdio.h>
-# include <math.h>
-# include "env.h"
-# include "memory.h"
-# include "names.h"
-# ifdef STRING
-# include <string.h>
-# endif
-# ifdef STRINGS
-# include <strings.h>
-# endif
-
-# ifdef SIGNAL
-# include <signal.h>
-# include <setjmp.h>
-# endif
-# ifdef CTRLBRK
-# include <dos.h>
-# include <signal.h>
-# include <setjmp.h>
-# endif
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include "env.h"
+#include "memory.h"
+#include "names.h"
+#include <string.h>
+#include <signal.h>
+#include <setjmp.h>
 
 extern object processStack;
 extern int linkPointer;
@@ -53,16 +41,9 @@ extern long time();
 extern object ioPrimitive(INT X OBJP);
 extern object sysPrimitive(INT X OBJP);
 
-# ifdef SIGNAL
 static jmp_buf jb;
-brkfun() { longjmp(jb, 1); }
-brkignore() {;}
-# endif
-# ifdef CTRLBRK
-static jmp_buf jb;
-brkfun() { longjmp(jb, 1); }
-brkignore() {;}
-# endif
+void brkfun() { longjmp(jb, 1); }
+void brkignore() {;}
 
 static object zeroaryPrims(number)
 int number;
@@ -163,22 +144,12 @@ object firstarg;
 			/* first save the values we are about to clobber */
 			saveProcessStack = processStack;
 			saveLinkPointer = linkPointer;
-# ifdef SIGNAL
 			/* trap control-C */
 			signal(SIGINT, brkfun);
 			if (setjmp(jb)) {
 				returnedObject = falseobj;
 				}
 			else
-# endif
-# ifdef CRTLBRK
-			/* trap control-C using dos ctrlbrk routine */
-			ctrlbrk(brkfun);
-			if (setjmp(jb)) {
-				returnedObject = falseobj;
-				}
-			else
-# endif
 			if (execute(firstarg, 5000))
 				returnedObject = trueobj;
 			else
@@ -186,12 +157,7 @@ object firstarg;
 			/* then restore previous environment */
 			processStack = saveProcessStack;
 			linkPointer = saveLinkPointer;
-# ifdef SIGNAL
 			signal(SIGINT, brkignore);
-# endif
-# ifdef CTRLBRK
-			ctrlbrk(brkignore);
-# endif
 			break;
 
 		default:		/* unknown primitive */

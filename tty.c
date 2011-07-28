@@ -9,6 +9,7 @@
 */
 
 # include <stdio.h>
+#include <stdlib.h>
 # include "env.h"
 # include "memory.h"
 
@@ -54,7 +55,7 @@ givepause()
 {	char buffer[80];
 
 	ignore fprintf(stderr,"push return to continue\n");
-	ignore gets(buffer);
+	ignore fgets(buffer,79,stdin);
 }
 
 object sysPrimitive(number, arguments)

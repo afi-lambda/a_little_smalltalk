@@ -58,8 +58,7 @@ object messageToSend, class;
 		given a message and a class to start looking in,
 		find the method associated with the message
 */
-static boolean findMethod(methodClassLocation)
-object *methodClassLocation;
+static boolean findMethod(object *methodClassLocation)
 {	object methodTable, methodClass;
 
 	method = nilobj;
@@ -119,9 +118,7 @@ int top, toadd;
 	return newStack;
 }
 
-boolean execute(aProcess, maxsteps)
-object aProcess;
-int maxsteps;
+boolean execute(object aProcess, int maxsteps)
 {   object returnedObject;
     int returnPoint, timeSliceCounter;
     object *pst, *psb, *rcv, *arg, *temps, *lits, *cntx;
@@ -177,14 +174,11 @@ int maxsteps;
             high = low;
             low = nextByte();
             }
-
-# if 0
 	if (debugging) {
 	fprintf(stderr,"method %s %d ",charPtr(basicAt(method, messageInMethod)), byteOffset);
-	fprintf(stderr,"stack %d %d ",pst, *pst);
+	//fprintf(stderr,"stack %d %d ",pst, (int)(*pst));
 	fprintf(stderr,"executing %d %d\n", high, low);
 	}
-# endif
         switch(high) {
 
             case PushInstance:
@@ -192,7 +186,7 @@ int maxsteps;
                 break;
 
             case PushArgument:
-		ipush(argumentsAt(low));
+				ipush(argumentsAt(low));
                 break;
 
             case PushTemporary:

@@ -22,111 +22,19 @@ systems that don't use the Make utility should do something like this:
 
 /*=============== rules for various systems ====================*/
 
-# ifdef B42
-	/* Berkeley 4.2, 4.3 and compatible running tty interface */
-		/*   which include: */
-		/* sequent balance */
-		/* Harris HCX-7 */
-		/* sun workstations */
+#include <stdlib.h>
+#include <string.h>
 
 typedef unsigned char byte;
 
-# define byteToInt(b) (b)
+#define byteToInt(b) (b)
 
 /* this is a bit sloppy - but it works */
-# define longCanBeInt(l) ((l >= -16383) && (l <= 16383))
+#define longCanBeInt(l) ((l >= -16383) && (l <= 16383))
 
-# define STRINGS
-# define SIGNAL
+#define STRINGS
+#define SIGNAL
 
-# endif
-
-# ifdef SYSV
-	/* system V systems including: */
-	/*	HP-UX for the HP-9000 series */
-	/* 	TEK 4404 with some modifications (see install.ms) */
-
-typedef unsigned char byte;
-
-# define byteToInt(b) (b)
-
-# define longCanBeInt(l) ((l >= -16383) && (l <= 16383))
-
-# define STRING
-
-# endif
-
-# ifdef TURBOC
-	/* IBM PC and compatiables using the TURBO C compiler */
-	
-	/* there are also changes that have to be made to the 
-		smalltalk source; see installation notes for
-		details */
-
-typedef unsigned char byte;
-
-# define byteToInt(b) (b)
-
-# define longCanBeInt(l) ((l >= -16383) && (l <= 16383))
-
-# define STRING
-# define ALLOC
-# define BINREADWRITE
-# define CTRLBRK
-# define PROTO
-# define obtalloc(x,y) (struct objectStruct huge *) farcalloc((unsigned long) x, (unsigned long) y)
-
-#endif
-
-# ifdef ATARI
-	/* Atari st 1040 - still exprimental */
-	
-typedef unsigned char byte;
-
-# define byteToInt(b) (b)
-
-# define longCanBeInt(l) ((l >= -16383) && (l <= 16383))
-
-# define STRING
-# define ALLOC
-# define BINREADWRITE
-# define obtalloc(x,y) (struct objectStruct *) calloc((unsigned) x, (unsigned) y)
-
-#endif
-
-# ifdef LIGHTC
-		/* Macintosh using Lightspeed C compiler */
-		/* see install.ms for other changes */
-
-typedef unsigned char byte;
-
-# define byteToInt(b) (b)
-
-# define longCanBeInt(l) ((l >= -16383) && (l <= 16383))
-
-# define STRINGS
-# define BINREADWRITE
-# define STDWIN
-# define NOARGC
-# define PROTO
-# define NOSYSTEM
-# define obtalloc(x,y) (struct objectStruct *) calloc((unsigned) x, (unsigned) y)
-
-# endif
-
-# ifdef VMS 
-	/* VAX VMS */
-
-typedef unsigned char byte;
-
-# define byteToInt(b) (b)
-
-# define longCanBeInt(l) ((l >= -16383) && (l <= 16383))
-
-# define STRING
-# define NOARGC
-
-# endif
 
 /* ======== various defines that should work on all systems ==== */
 

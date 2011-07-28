@@ -71,10 +71,7 @@ int hash;
 	}
 }
 
-object hashEachElement(dict, hash, fun)
-object dict;
-register int hash;
-int (*fun)();
+object hashEachElement(object dict, register int hash, int (*fun)())
 {	object table, key, value, link;
 	register object *hp;
 	int tablesize;

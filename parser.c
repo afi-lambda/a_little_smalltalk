@@ -29,12 +29,7 @@
 # include "names.h"
 # include "interp.h"
 # include "lex.h"
-# ifdef STRING
 # include <string.h>
-# endif
-# ifdef STRINGS
-# include <strings.h>
-# endif
 
 		/* all of the following limits could be increased (up to
 			256) without any trouble.  They are kept low 
@@ -65,8 +60,14 @@ static char selector[80];		/* message selector */
 
 enum blockstatus {NotInBlock, InBlock, OptimizedBlock} blockstat;
 
-setInstanceVariables(aClass)
-object aClass;
+static parsePrimitive();
+static genMessage(boolean toSuper, int argumentCount, object messagesym);
+static block();
+static assignment(char *name);
+static expression();
+static body();
+
+setInstanceVariables(object aClass)
 {	int i, limit;
 	object vars;
 
@@ -353,10 +354,7 @@ static parsePrimitive()
 	ignore nextToken();
 }
 
-static genMessage(toSuper, argumentCount, messagesym)
-boolean toSuper;
-int argumentCount;
-object messagesym;
+static genMessage(boolean toSuper, int argumentCount, object messagesym)
 {	boolean sent = false;
 	int i;
 
@@ -564,8 +562,7 @@ static expression()
 		}
 }
 
-static assignment(name)
-char *name;
+static assignment(char *name)
 {	int i;
 	boolean done;
 
@@ -758,10 +755,7 @@ static messagePattern()
 		compilError(selector,"illegal message selector", tokenString);
 }
 
-boolean parse(method, text, savetext)
-object method;
-char *text;
-boolean savetext;
+boolean parse(object method, char *text, boolean savetext)
 {	int i;
 	object bytecodes, theLiterals;
 	byte *bp;

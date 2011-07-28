@@ -10,12 +10,7 @@
 # include "memory.h"
 # include "names.h"
 # include "lex.h"
-# ifdef STRING
 # include <string.h>
-# endif
-# ifdef STRINGS
-# include <strings.h>
-# endif
 
 # define MethodTableSize 39
 

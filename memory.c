@@ -32,19 +32,9 @@
 # include "env.h"
 # include "memory.h"
 
-# ifdef STRING
 # include <string.h>
-# endif
-# ifdef STRINGS
-# include <strings.h>
-# endif
 
-# ifdef ALLOC
-# include <alloc.h>
-# endif
-# ifndef ALLOC
-extern char *calloc();
-# endif
+#include <stdlib.h>
 
 boolean debugging = false;
 object sysobj;	/* temporary used to avoid rereference in macros */
@@ -251,8 +241,7 @@ int size;
 	return newObj;
 }
 
-object allocStr(str)
-register char *str;
+object allocStr(register char *str)
 {	register object newSym;
 
 	newSym = allocByte(1 + strlen(str));

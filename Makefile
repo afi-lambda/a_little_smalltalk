@@ -1,4 +1,4 @@
-INTERPc = memory.c names.c news.c interp.c
+INTERPc = memory.c names.c news.c interp.c tty.c
 INTERPo = memory.o names.o news.o interp.o
 PRIMITIVEc = primitive.c filein.c lex.c parser.c unixio.c
 PRIMITIVEo = primitive.o filein.o lex.o parser.o unixio.o
@@ -11,6 +11,7 @@ STFILES = $(basicST) $(unixST) $(testST) tty.st graphics.st stdwin.st
 FILES = README Makefile vms.com $(CFILES) $(STFILES) *.ms
 # the following are used only by turboc on the ibm pc
 TURBOc=memory names news interp primitive filein lex parser unixio tty
+CFLAGS=-O0 -g
 
 all: initial st
 
@@ -22,3 +23,6 @@ initial:
 st:
 	gcc -o st $(CFLAGS) $(INTERPc) $(PRIMITIVEc) st.c $(INTERFACE) -lm $(LIBS)
 
+clean:
+	-rm -f *.o
+	-rm initial st

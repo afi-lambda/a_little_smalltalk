@@ -5,6 +5,7 @@
 	written by tim budd, January 1988
 */
 # include <stdio.h>
+#include <string.h>
 # include "env.h"
 # include "memory.h"
 # include "names.h"
@@ -23,10 +24,7 @@ struct {
 		The only objects with nonzero reference counts
 		will be those reachable from either symbols
 */
-static int fr(fp, p, s)
-FILE *fp;
-char *p;
-int s;
+static int fr(FILE *fp, char *p, int s)
 {	int r;
 
 	r = fread(p, s, 1, fp);
@@ -35,8 +33,7 @@ int s;
 	return r;
 }
 
-noreturn imageRead(fp)
-FILE *fp;
+noreturn imageRead(FILE *fp)
 {	short i, size;
 	object *mBlockAlloc();
 
@@ -76,18 +73,14 @@ FILE *fp;
 	imageWrite - write out an object image
 */
 
-static fw(fp, p, s)
-FILE *fp;
-char *p;
-int  s;
+static fw(FILE *fp, char *p, int s)
 {
 	if (fwrite(p, s, 1, fp) != 1) {
 		sysError("imageWrite size error","");
 		}
 }
 
-noreturn imageWrite(fp)
-FILE *fp;
+noreturn imageWrite(FILE *fp)
 {	short i, size;
 
 	fw(fp, (char *) &symbols, sizeof(object));
@@ -114,9 +107,7 @@ FILE *fp;
 /* we assume this is initialized to NULL */
 static FILE *fp[MAXFILES];
 
-object ioPrimitive(number, arguments)
-int number;
-object *arguments;
+object ioPrimitive(int number, object *arguments)
 {	int i, j;
 	char *p, buffer[1024];
 	object returnedObject;

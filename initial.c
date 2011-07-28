@@ -9,28 +9,13 @@
 # include "memory.h"
 # include "names.h"
 
+static makeInitialImage();
+static goDoIt(char *text);
+
 int initial = 1;	/* making initial image */
 
 /* lightspeed C not using argc/argv features */
-# ifdef NOARGC
-char *argv[] = {"initial", "basic.st","mag.st","collect.st", "file.st",
-		"mult.st", 
-# ifdef STDWIN
-		"graphics.st", "stdwin.st", 0};
-int argc = 8;
-# endif
-# ifndef STDWIN
-		"tty.st", 0};
-int argc = 7;
-# endif
-
-main()
-# endif
-# ifndef NOARGC
-main(argc, argv) 
-int argc;
-char **argv;
-# endif
+int main(int argc, char **argv)
 { 	char methbuf[100];
 	int i;
 
@@ -55,11 +40,10 @@ char **argv;
 	fprintf(stderr,"finished\n");
 
 	/* exit and return - belt and suspenders, but it keeps lint happy */
-	exit(0); return 0;
+	return 0;
 }
 
-static goDoIt(text)
-char *text;
+static goDoIt(char *text)
 { 	object process, stack, method;
 
 	method = newMethod();
