@@ -23,6 +23,9 @@ initial:
 st:
 	gcc -o st $(CFLAGS) $(INTERPc) $(PRIMITIVEc) st.c $(INTERFACE) -lm $(LIBS)
 
+image: initial
+	./initial stlib/*
+
 clean:
 	-rm -f *.o
 	-rm initial st

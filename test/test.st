@@ -75,7 +75,8 @@ Methods Test 'all'
 		'factorial test passed' print
 |
 	filein
-		File new; name: 'queen.st'; open: 'r'; fileIn.
+		'loading file . . .' print.
+		File new; name: 'test/queen.st'; open: 'r'; fileIn.
 		"(globalNames includesKey: #Queen )
 			ifFalse: [ smalltalk error: 'fileIn failure']."
 		'file in test passed' print.
