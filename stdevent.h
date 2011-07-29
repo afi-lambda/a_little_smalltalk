@@ -4,15 +4,20 @@ struct event {
 	int type;
 	WINDOW *window;
 	union {
-	/* case WE_CHAR: */
+		/* case WE_CHAR: */
 		int character;
-	/* case WE_COMMAND: */
+		/* case WE_COMMAND: */
 		int command;
-	/* case WE_MENU: */
-		struct { int id; int item; } m;
-	/* case WE_DRAW: */
-		struct { int left, top, right, bottom; } area;
-	/* case WE_MOUSE_DOWN, WE_MOUSE_MOVE, WE_MOUSE_UP: */
+		/* case WE_MENU: */
+		struct {
+			int id;
+			int item;
+		} m;
+		/* case WE_DRAW: */
+		struct {
+			int left, top, right, bottom;
+		} area;
+		/* case WE_MOUSE_DOWN, WE_MOUSE_MOVE, WE_MOUSE_UP: */
 		struct {
 			int v;
 			int h;
@@ -42,10 +47,10 @@ struct event {
 #define WE_DEACTIVATE	12	/* Window became inactive */
 
 /* Command codes for WE_COMMAND.
-   Special ways of entering these are usually available,
-   such as clicking icons, standard menu items or special keys.
-   Some ASCII keys are also passed back as commands since they
-   more often than not need special processing. */
+ Special ways of entering these are usually available,
+ such as clicking icons, standard menu items or special keys.
+ Some ASCII keys are also passed back as commands since they
+ more often than not need special processing. */
 
 #define WC_CLOSE	1	/* Should become a separate event! */
 /* The following four are arrow keys */

@@ -1,10 +1,10 @@
 /*
-	Little Smalltalk, version 2
-	Written by Tim Budd, Oregon State University, July 1987
-*/
+ Little Smalltalk, version 2
+ Written by Tim Budd, Oregon State University, July 1987
+ */
 /*
-	symbolic definitions for the bytecodes
-*/
+ symbolic definitions for the bytecodes
+ */
 
 # define Extended 0
 # define PushInstance 1

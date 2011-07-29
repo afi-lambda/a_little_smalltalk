@@ -4,16 +4,16 @@
 
 TEXTEDIT *tealloc ARGS((WINDOW *win, int left, int top, int width));
 TEXTEDIT *tecreate ARGS((WINDOW *win,
-	int left, int top, int right, int bottom));
+				int left, int top, int right, int bottom));
 void tefree ARGS((TEXTEDIT *tp));
 void tedestroy ARGS((TEXTEDIT *tp));
 
 void tedraw ARGS((TEXTEDIT *tp));
 void tedrawnew ARGS((TEXTEDIT *tp,
-	int left, int top, int right, int bottom));
+				int left, int top, int right, int bottom));
 void temove ARGS((TEXTEDIT *tp, int left, int top, int width));
 void temovenew ARGS((TEXTEDIT *tp,
-	int left, int top, int right, int bottom));
+				int left, int top, int right, int bottom));
 
 void tesetfocus ARGS((TEXTEDIT *tp, int foc1, int foc2));
 void tereplace ARGS((TEXTEDIT *tp, char *str));
@@ -41,9 +41,9 @@ int tegetbottom ARGS((TEXTEDIT *tp));
 /* Text paragraph drawing functions: */
 
 int wdrawpar ARGS((int h, int v, char *text, int width));
-	/* Returns new v coord. */
+/* Returns new v coord. */
 int wparheight ARGS((char *text, int width));
-	/* Returns height */
+/* Returns height */
 
 /* Clipboard functions; */
 
