@@ -93,8 +93,8 @@ static object zeroaryPrims(int number)
 	return (returnedObject);
 }
 
-static int unaryPrims(number, firstarg)
-	int number;object firstarg; {
+static int unaryPrims(int number, object firstarg)
+{
 	int i, j, saveLinkPointer;
 	object returnedObject, saveProcessStack;
 
@@ -172,8 +172,8 @@ static int unaryPrims(number, firstarg)
 	return (returnedObject);
 }
 
-static int binaryPrims(number, firstarg, secondarg)
-	int number;object firstarg, secondarg; {
+static int binaryPrims(int number, object firstarg, object secondarg)
+{
 	char buffer[2000];
 	int i;
 	object returnedObject;
@@ -250,8 +250,8 @@ static int binaryPrims(number, firstarg, secondarg)
 	return (returnedObject);
 }
 
-static int trinaryPrims(number, firstarg, secondarg, thirdarg)
-	int number;object firstarg, secondarg, thirdarg; {
+static int trinaryPrims(int number, object firstarg, object secondarg, object thirdarg)
+{
 	char *bp, *tp, buffer[256];
 	int i, j;
 	object returnedObject;
@@ -305,8 +305,8 @@ static int trinaryPrims(number, firstarg, secondarg, thirdarg)
 	return (returnedObject);
 }
 
-static int intUnary(number, firstarg)
-	int number, firstarg; {
+static int intUnary(int number, int firstarg)
+{
 	object returnedObject;
 
 	switch (number) {
@@ -340,8 +340,8 @@ static int intUnary(number, firstarg)
 	return (returnedObject);
 }
 
-static object intBinary(number, firstarg, secondarg)
-	register int firstarg, secondarg;int number; {
+static object intBinary(int number, register int firstarg, register int secondarg)
+{
 	boolean binresult;
 	long longresult;
 	object returnedObject;
@@ -435,8 +435,8 @@ static object intBinary(number, firstarg, secondarg)
 	return (returnedObject);
 }
 
-static int strUnary(number, firstargument)
-	int number;char *firstargument; {
+static int strUnary(int number, char *firstargument)
+{
 	object returnedObject;
 
 	switch (number) {
@@ -474,8 +474,8 @@ static int strUnary(number, firstargument)
 	return (returnedObject);
 }
 
-static int floatUnary(number, firstarg)
-	int number;double firstarg; {
+static int floatUnary(int number, double firstarg)
+{
 	char buffer[20];
 	double temp;
 	int i, j;
@@ -534,8 +534,8 @@ static int floatUnary(number, firstarg)
 	return (returnedObject);
 }
 
-static object floatBinary(number, first, second)
-	int number;double first, second; {
+static object floatBinary(int number, double first, double second)
+{
 	boolean binResult;
 	object returnedObject;
 
@@ -589,8 +589,8 @@ static object floatBinary(number, first, second)
 /* primitive -
  the main driver for the primitive handler
  */
-object primitive(primitiveNumber, arguments)
-	register int primitiveNumber;object *arguments; {
+object primitive(register int primitiveNumber, object *arguments)
+{
 	register int primitiveGroup = primitiveNumber / 10;
 	object returnedObject;
 
