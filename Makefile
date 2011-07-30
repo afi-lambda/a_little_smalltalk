@@ -1,16 +1,15 @@
-CFILES = memory.c names.c news.c interp.c tty.c primitive.c filein.c lex.c parser.c unixio.c
+CFILES = st.c memory.c names.c news.c interp.c tty.c primitive.c filein.c lex.c parser.c unixio.c
 
 CFLAGS=-O0 -g
 
-all: st
+all: lsti
 
-# st - the actual bytecode interpreter
-st:
-	gcc -o st $(CFLAGS) $(CFILES) st.c $(INTERFACE) -lm $(LIBS)
+lsti:
+	gcc -o $@ $(CFLAGS) $(CFILES) -lm
 
-image: st
-	./st stlib/*
+image: lsti
+	./lsti stlib/*
 
 clean:
-	-rm -f *.o
-	-rm st systemImage
+	@-rm -f *.o 2>/dev/null
+	@-rm lsti systemImage 2>/dev/null

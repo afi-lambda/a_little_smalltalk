@@ -53,8 +53,7 @@ main(int argc, char **argv)
 		/*debugging = true;*/
 
 		/* not using windowing interface, safe to print out message */
-		printf("Little Smalltalk, Version 3.04\n");
-		printf("Written by Tim Budd, Oregon State University\n");
+		printf("Little Smalltalk Improved, Version 0.01\n");
 
 		while (execute(firstProcess, 15000))
 			;
