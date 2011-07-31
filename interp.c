@@ -13,11 +13,11 @@
  otherwise simply loops until time slice has ended
  */
 
-# include <stdio.h>
-# include "env.h"
-# include "memory.h"
-# include "names.h"
-# include "interp.h"
+#include <stdio.h>
+#include "env.h"
+#include "memory.h"
+#include "names.h"
+#include "interp.h"
 
 object trueobj, falseobj;
 boolean watching = 0;

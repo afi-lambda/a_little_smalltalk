@@ -7,10 +7,10 @@
  handle the creation of various kinds of objects
  */
 
-# include <stdio.h>
-# include "env.h"
-# include "memory.h"
-# include "names.h"
+#include <stdio.h>
+#include "env.h"
+#include "memory.h"
+#include "names.h"
 
 static object arrayClass = nilobj; /* the class Array */
 static object intClass = nilobj; /* the class Integer */
@@ -18,15 +18,13 @@ static object stringClass = nilobj; /* the class String */
 static object symbolClass = nilobj; /* the class Symbol */
 
 /* ncopy - copy exactly n bytes from place to place */
-ncopy(register char *p, register char *q, register int n)
-{
+ncopy(register char *p, register char *q, register int n) {
 	for (; n > 0; n--)
 		*p++ = *q++;
 }
 
 /* getClass - get the class of an object */
-object getClass(register object obj)
-{
+object getClass(register object obj) {
 	if (isInteger(obj)) {
 		if (intClass == nilobj)
 			intClass = globalSymbol("Integer");
@@ -35,8 +33,7 @@ object getClass(register object obj)
 	return (classField(obj));
 }
 
-object newArray(int size)
-{
+object newArray(int size) {
 	object newObj;
 
 	newObj = allocObject(size);
@@ -54,8 +51,7 @@ object newBlock() {
 	return newObj;
 }
 
-object newByteArray(int size)
-{
+object newByteArray(int size) {
 	object newobj;
 
 	newobj = allocByte(size);
@@ -63,8 +59,7 @@ object newByteArray(int size)
 	return newobj;
 }
 
-object newChar(int value)
-{
+object newChar(int value) {
 	object newobj;
 
 	newobj = allocObject(1);
@@ -73,8 +68,7 @@ object newChar(int value)
 	return (newobj);
 }
 
-object newClass(char *name)
-{
+object newClass(char *name) {
 	object newObj, nameObj;
 
 	newObj = allocObject(classSize);
@@ -90,8 +84,7 @@ object newClass(char *name)
 	return newObj;
 }
 
-object copyFrom(object obj, int start, int size)
-{
+object copyFrom(object obj, int start, int size) {
 	object newObj;
 	int i;
 
@@ -103,8 +96,7 @@ object copyFrom(object obj, int start, int size)
 	return newObj;
 }
 
-object newContext(int link, object method, object args, object temp)
-{
+object newContext(int link, object method, object args, object temp) {
 	object newObj;
 
 	newObj = allocObject(contextSize);
@@ -116,8 +108,7 @@ object newContext(int link, object method, object args, object temp)
 	return newObj;
 }
 
-object newDictionary(int size)
-{
+object newDictionary(int size) {
 	object newObj;
 
 	newObj = allocObject(1);
@@ -126,8 +117,7 @@ object newDictionary(int size)
 	return newObj;
 }
 
-object newFloat(double d)
-{
+object newFloat(double d) {
 	object newObj;
 
 	newObj = allocByte((int) sizeof(double));
@@ -136,16 +126,14 @@ object newFloat(double d)
 	return newObj;
 }
 
-double floatValue(object o)
-{
+double floatValue(object o) {
 	double d;
 
 	ncopy((char *) &d, charPtr(o), (int) sizeof(double));
 	return d;
 }
 
-object newLink(object key, object value)
-{
+object newLink(object key, object value) {
 	object newObj;
 
 	newObj = allocObject(3);
@@ -163,8 +151,7 @@ object newMethod() {
 	return newObj;
 }
 
-object newStString(char *value)
-{
+object newStString(char *value) {
 	object newObj;
 
 	newObj = allocStr(value);
@@ -174,8 +161,7 @@ object newStString(char *value)
 	return (newObj);
 }
 
-object newSymbol(char *str)
-{
+object newSymbol(char *str) {
 	object newObj;
 
 	/* first see if it is already there */

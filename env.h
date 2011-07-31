@@ -43,25 +43,11 @@ typedef unsigned char byte;
 # define false 0
 
 /* define the datatype boolean */
-# ifdef NOTYPEDEF
-# define boolean int
-# endif
-# ifndef NOTYPEDEF
 typedef int boolean;
-# endif
 
 /* define a bit of lint silencing */
-/*  ignore means ``i know this function returns something,
- but I really, really do mean to ignore it */
-# ifdef NOVOID
-# define ignore
-# define noreturn
-# define void int
-# endif
-# ifndef NOVOID
-# define ignore (void)
-# define noreturn void
-# endif
+/*   means ``i know this function returns something,
+ but I really, really do mean to  it */
 
 /* prototypes are another problem.  If they are available, they should be
  used; but if they are not available their use will cause compiler errors.

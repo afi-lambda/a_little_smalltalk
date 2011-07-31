@@ -175,9 +175,9 @@ extern object symbols;
 /*
  finally some external declarations with prototypes
  */
-extern noreturn sysError(STR X STR);
-extern noreturn dspMethod(STR X STR);
-extern noreturn initMemoryManager( NOARGS);
-extern noreturn imageWrite( FILEP);
-extern noreturn imageRead( FILEP);
+extern void sysError(STR X STR);
+extern void dspMethod(STR X STR);
+extern void initMemoryManager( NOARGS);
+extern void imageWrite( FILEP);
+extern void imageRead( FILEP);
 extern boolean debugging;

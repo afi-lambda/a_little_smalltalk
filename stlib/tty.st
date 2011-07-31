@@ -56,7 +56,7 @@ Methods Class 'all'
 ]
 Methods Smalltalk 'all'
 	getPrompt: aString
-		stdout printNoReturn: aString.
+		stdout printvoid: aString.
 		^ stdin getString
 |
 	inquire: aString	| response |

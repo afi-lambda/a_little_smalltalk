@@ -80,7 +80,7 @@ static int currentMemoryPosition; /* last used position in above */
 # endif
 
 /* initialize the memory management module */
-noreturn initMemoryManager() {
+void initMemoryManager() {
 	int i;
 
 # ifdef obtalloc
@@ -241,7 +241,7 @@ object allocStr(register char *str) {
 	register object newSym;
 
 	newSym = allocByte(1 + strlen(str));
-	ignore strcpy(charPtr(newSym), str);
+	 strcpy(charPtr(newSym), str);
 	return (newSym);
 }
 
@@ -301,7 +301,7 @@ object basicAt(object z, register int i)
 	if (isInteger(z))
 	sysError("attempt to index","into integer");
 	else if ((i <= 0) || (i > sizeField(z))) {
-		ignore fprintf(stderr,"index %d size %d\n", i, (int) sizeField(z));
+		 fprintf(stderr,"index %d size %d\n", i, (int) sizeField(z));
 		sysError("index out of range","in basicAt");
 	}
 	else
@@ -317,7 +317,7 @@ void simpleAtPut(object z, int i, object v)
 	if (isInteger(z))
 	sysError("assigning index to","integer value");
 	else if ((i <= 0) || (i > sizeField(z))) {
-		ignore fprintf(stderr,"index %d size %d\n", i, (int) sizeField(z));
+		 fprintf(stderr,"index %d size %d\n", i, (int) sizeField(z));
 		sysError("index out of range","in basicAtPut");
 	}
 	else {

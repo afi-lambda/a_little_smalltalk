@@ -33,11 +33,11 @@ static int fr(FILE *fp, char *p, int s) {
 	return r;
 }
 
-noreturn imageRead(FILE *fp) {
+void imageRead(FILE *fp) {
 	short i, size;
 	object *mBlockAlloc();
 
-	ignore fr(fp, (char *) &symbols, sizeof(object));
+	 fr(fp, (char *) &symbols, sizeof(object));
 	i = 0;
 
 	while (fr(fp, (char *) &dummyObject, sizeof(dummyObject))) {
@@ -56,7 +56,7 @@ noreturn imageRead(FILE *fp) {
 			size = ((-size) + 1) / 2;
 		if (size != 0) {
 			objectTable[i].memory = mBlockAlloc((int) size);
-			ignore fr(fp, (char *) objectTable[i].memory, sizeof(object)
+			 fr(fp, (char *) objectTable[i].memory, sizeof(object)
 					* (int) size);
 		} else
 			objectTable[i].memory = (object *) 0;
@@ -79,7 +79,7 @@ static fw(FILE *fp, char *p, int s) {
 	}
 }
 
-noreturn imageWrite(FILE *fp) {
+void imageWrite(FILE *fp) {
 	short i, size;
 
 	fw(fp, (char *) &symbols, sizeof(object));
@@ -136,7 +136,7 @@ object ioPrimitive(int number, object *arguments) {
 
 	case 1: /* file close - recover slot */
 		if (fp[i])
-			ignore fclose(fp[i]);
+			 fclose(fp[i]);
 		fp[i] = NULL;
 		break;
 
@@ -181,11 +181,11 @@ object ioPrimitive(int number, object *arguments) {
 	case 9: /* print string */
 		if (!fp[i])
 			break;
-		ignore fputs(charPtr(arguments[1]), fp[i]);
+		 fputs(charPtr(arguments[1]), fp[i]);
 		if (number == 8)
-			ignore fflush(fp[i]);
+			 fflush(fp[i]);
 		else
-			ignore fputc('\n', fp[i]);
+			 fputc('\n', fp[i]);
 		break;
 
 	default:

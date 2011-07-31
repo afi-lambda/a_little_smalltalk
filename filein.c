@@ -5,12 +5,12 @@
  routines used in reading in textual descriptions of classes
  */
 
-# include <stdio.h>
-# include "env.h"
-# include "memory.h"
-# include "names.h"
-# include "lex.h"
-# include <string.h>
+#include <stdio.h>
+#include "env.h"
+#include "memory.h"
+#include "names.h"
+#include "lex.h"
+#include <string.h>
 
 # define MethodTableSize 39
 
@@ -61,14 +61,14 @@ static readClassDeclaration() {
 		super = findClass(tokenString);
 		basicAtPut(classObj, superClassInClass, super);
 		size = intValue(basicAt(super, sizeInClass));
-		ignore nextToken();
+		nextToken();
 	}
 	if (token == nameconst) { /* read instance var names */
 		instanceTop = 0;
 		while (token == nameconst) {
 			instanceVariables[instanceTop++] = newSymbol(tokenString);
 			size++;
-			ignore nextToken();
+			nextToken();
 		}
 		vars = newArray(instanceTop);
 		for (i = 0; i < instanceTop; i++) {
@@ -111,7 +111,7 @@ static readMethods(FILE *fd, boolean printit)
 		while ((eoftest = fgets(lineBuffer, LINEBUFFERSIZE, fd)) != NULL) {
 			if ((lineBuffer[0] == '|') || (lineBuffer[0] == ']'))
 				break;
-			ignore strcat(textBuffer, lineBuffer);
+			strcat(textBuffer, lineBuffer);
 		}
 		if (eoftest == NULL) {
 			sysError("unexpected end of file", "while reading method");

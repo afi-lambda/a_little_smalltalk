@@ -6,17 +6,11 @@
  should be called only by parser
  */
 
-# include <stdio.h>
-# include <ctype.h>
-# ifdef LIGHTC
-# include <unix.h>
-# include <proto.h>
-# endif
-# include "env.h"
-# include "memory.h"
-# include "lex.h"
-
-extern double atof();
+#include <stdio.h>
+#include <ctype.h>
+#include "env.h"
+#include "memory.h"
+#include "lex.h"
 
 /* global variables returned by lexical analyser */
 
@@ -34,12 +28,12 @@ static char cc; /* current character */
 static long longresult; /* value used when building int tokens */
 
 /* lexinit - initialize the lexical analysis routines */
-noreturn lexinit(char *str)
+void lexinit(char *str)
 {
 	pushindex = 0;
 	cp = str;
 	/* get first token */
-	ignore nextToken();
+	 nextToken();
 }
 
 /* pushBack - push one character back into the input */
@@ -180,7 +174,7 @@ tokentype nextToken() {
 		if (nextChar() && cc == 'e') { /* possible float */
 			if (nextChar() && cc == '-') {
 				sign = true;
-				ignore nextChar();
+				 nextChar();
 			} else
 				sign = false;
 			if (cc && isdigit(cc)) { /* yep, its a float */
@@ -189,7 +183,7 @@ tokentype nextToken() {
 					*tp++ = '-';
 				while (cc && isdigit(cc)) {
 					*tp++ = cc;
-					ignore nextChar();
+					 nextChar();
 				}
 				if (cc)
 					pushBack(cc);

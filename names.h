@@ -60,10 +60,10 @@ extern object newLink(object key, object value);
 extern object newStString( STR);
 extern object newSymbol( STR);
 extern double floatValue(object o);
-extern noreturn initCommonSymbols(); /* common symbols */
+extern void initCommonSymbols(); /* common symbols */
 extern object unSyms[], binSyms[];
 
-extern noreturn nameTableInsert(object dict, int hash, object key, object value);
+extern void nameTableInsert(object dict, int hash, object key, object value);
 /*extern object hashEachElement( OBJ X INT X INT FUNC );*/
 extern int strHash( STR);
 extern object globalKey( STR);

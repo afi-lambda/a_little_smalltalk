@@ -560,7 +560,7 @@ be replaced by #define constructs.
 .Mc NOVOID
 Defined if the void keyword is not recognized.
 If defined, expect \fIlint\fP to complain a lot about functions returning
-values which are sometimes (or always) ignored.
+values which are sometimes (or always) d.
 .Mc SIGNALS
 Used if \fIboth\fP the <signals.h> package and the <longjmp.h> package are
 available, and if the routine used to set signals is signal.

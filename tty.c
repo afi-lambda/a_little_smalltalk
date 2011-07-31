@@ -8,49 +8,49 @@
  will replace this file with another.
  */
 
-# include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
-# include "env.h"
-# include "memory.h"
+#include "env.h"
+#include "memory.h"
 
 extern boolean parseok;
 
 /* report a fatal system error */
-noreturn sysError(char *s1, char *s2)
+void sysError(char *s1, char *s2)
 {
-	ignore fprintf(stderr, "%s\n%s\n", s1, s2);
-	ignore abort();
+	 fprintf(stderr, "%s\n%s\n", s1, s2);
+	 abort();
 }
 
 /* report a nonfatal system error */
-noreturn sysWarn(char *s1, char *s2)
+void sysWarn(char *s1, char *s2)
 {
-	ignore fprintf(stderr, "%s\n%s\n", s1, s2);
+	 fprintf(stderr, "%s\n%s\n", s1, s2);
 }
 
 compilWarn(char *selector, char *str1, char *str2)
 {
-	ignore fprintf(stderr, "compiler warning: Method %s : %s %s\n", selector,
+	 fprintf(stderr, "compiler warning: Method %s : %s %s\n", selector,
 			str1, str2);
 }
 
 compilError(char *selector, char *str1, char *str2)
 {
-	ignore fprintf(stderr, "compiler error: Method %s : %s %s\n", selector,
+	 fprintf(stderr, "compiler error: Method %s : %s %s\n", selector,
 			str1, str2);
 	parseok = false;
 }
 
-noreturn dspMethod(char *cp, char *mp)
+void dspMethod(char *cp, char *mp)
 {
-	/*ignore fprintf(stderr,"%s %s\n", cp, mp);*/
+	/* fprintf(stderr,"%s %s\n", cp, mp);*/
 }
 
 givepause() {
 	char buffer[80];
 
-	ignore fprintf(stderr, "push return to continue\n");
-	ignore fgets(buffer, 79, stdin);
+	 fprintf(stderr, "push return to continue\n");
+	 fgets(buffer, 79, stdin);
 }
 
 object sysPrimitive(int number, object *arguments)

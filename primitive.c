@@ -45,7 +45,7 @@ static jmp_buf jb;
 void brkfun() {
 	longjmp(jb, 1);
 }
-void brkignore() {
+void brk() {
 	;
 }
 
@@ -162,7 +162,7 @@ static int unaryPrims(int number, object firstarg)
 		/* then restore previous environment */
 		processStack = saveProcessStack;
 		linkPointer = saveLinkPointer;
-		signal(SIGINT, brkignore);
+		signal(SIGINT, brk);
 		break;
 
 	default: /* unknown primitive */
@@ -199,8 +199,8 @@ static int binaryPrims(int number, object firstarg, object secondarg)
 		break;
 
 	case 4: /* string cat */
-		ignore strcpy(buffer, charPtr(firstarg));
-		ignore strcat(buffer, charPtr(secondarg));
+		 strcpy(buffer, charPtr(firstarg));
+		 strcat(buffer, charPtr(secondarg));
 		returnedObject = newStString(buffer);
 		break;
 
@@ -322,7 +322,7 @@ static int intUnary(int number, int firstarg)
 		break;
 
 	case 5: /* set random number */
-		ignore srand((unsigned) firstarg);
+		 srand((unsigned) firstarg);
 		returnedObject = nilobj;
 		break;
 
@@ -483,7 +483,7 @@ static int floatUnary(int number, double firstarg)
 
 	switch (number) {
 	case 1: /* floating value asString */
-		ignore sprintf(buffer, "%g", firstarg);
+		 sprintf(buffer, "%g", firstarg);
 		returnedObject = newStString(buffer);
 		break;
 
@@ -516,7 +516,7 @@ static int floatUnary(int number, double firstarg)
 		if (firstarg > 2e9)
 		returnedObject = nilobj;
 		else {
-			ignore modf(firstarg, &temp);
+			 modf(firstarg, &temp);
 			ltemp = (long) temp;
 			if (longCanBeInt(ltemp))
 			returnedObject = newInteger((int) temp);

@@ -70,7 +70,7 @@ Methods File 'all'
 			ifTrue: [<129 number aString>]
 			ifFalse: [smalltalk error: 'file not open']
 |
-	printNoReturn: aString
+	printvoid: aString
 		(number notNil)
 			ifTrue: [<128 number aString>]
 			ifFalse: [smalltalk error: 'file not open']
@@ -123,10 +123,10 @@ Methods Class 'all'
 |
 	fileOutOn: aFile
 		" file out class description "
-		aFile printNoReturn: 
+		aFile printvoid: 
 			'Class ', name , ' ', superClass.
 		(variables notNil) ifTrue: [
-			variables do: [:v | aFile printNoReturn: ' ', v ]].
+			variables do: [:v | aFile printvoid: ' ', v ]].
 		aFile print: ''.
 		self fileOutMethodsOn: aFile.
 |

@@ -57,10 +57,8 @@ main(int argc, char **argv)
 
 		while (execute(firstProcess, 15000))
 			;
-
-		/* exit and return - belt and suspenders, but it keeps lint happy */
 	}
-	else
+	else // We have been called for image creation
 	{
 		char methbuf[100];
 		int i;
@@ -73,7 +71,7 @@ main(int argc, char **argv)
 
 		for (i = 1; i < argc; i++) {
 			fprintf(stderr, "%s:\n", argv[i]);
-			ignore sprintf(methbuf, "x <120 1 '%s' 'r'>. <123 1>. <121 1>", argv[i]);
+			sprintf(methbuf, "x <120 1 '%s' 'r'>. <123 1>. <121 1>", argv[i]);
 			goDoIt(methbuf);
 		}
 
@@ -94,7 +92,7 @@ static goDoIt(char *text) {
 	method = newMethod();
 	incr(method);
 	setInstanceVariables(nilobj);
-	ignore parse(method, text, false);
+	 parse(method, text, false);
 
 	process = allocObject(processSize);
 	incr(process);
@@ -144,12 +142,12 @@ static makeInitialImage() {
 
 	/* now fix up classes for symbol table */
 	/* and make a couple common classes, just to hold their places */
-	ignore newClass("Link");
-	ignore newClass("ByteArray");
+	 newClass("Link");
+	 newClass("ByteArray");
 	setClass(hashTable, newClass("Array"));
 	setClass(symbols, newClass("Dictionary"));
 	setClass(nilobj, newClass("UndefinedObject"));
-	ignore newClass("String");
+	 newClass("String");
 	nameTableInsert(symbols, strHash("symbols"), newSymbol("symbols"), symbols);
 
 	/* finally at least make true and false to be distinct */
