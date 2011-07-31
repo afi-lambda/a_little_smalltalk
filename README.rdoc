@@ -1,5 +1,5 @@
-A Little Smalltalk V3 improved
-===
+= A Little Smalltalk V3 improved
+
 Based on little smalltalk v3 a very tiny implementation of a Smalltalk like
 language from Prof. Timothy Budd.
 
