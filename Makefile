@@ -4,16 +4,13 @@ CFLAGS=-O0 -g
 
 all: lsti
 
-leg:
-	cd ext/peg && make leg
-
-lsti: leg
+lsti:
 	gcc -o $@ $(CFLAGS) $(CFILES) -lm
 
 image: lsti
 	./lsti stlib/*
 
 clean:
-	@cd ext/peg && make clean
 	@-rm -f *.o 2>/dev/null
 	@-rm lsti systemImage 2>/dev/null
+	

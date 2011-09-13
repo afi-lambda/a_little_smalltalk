@@ -2,24 +2,6 @@
  Little Smalltalk, version two
  Written by Tim Budd, Oregon State University, July 1987
 
- environmental factors
-
- This include file gathers together environmental factors that
- are likely to change from one C compiler to another, or from
- one system to another.  Please refer to the installation
- notes for more information.
-
- for systems using the Make utility, the system name is set
- by the make script.
- other systems (such as the Mac) should put a define statement
- at the beginning of the file, as shown below
- */
-
-/*
- systems that don't use the Make utility should do something like this:
- # define LIGHTC
- */
-
 /*=============== rules for various systems ====================*/
 
 #include <stdlib.h>
@@ -45,16 +27,6 @@ typedef unsigned char byte;
 /* define the datatype boolean */
 typedef int boolean;
 
-/* define a bit of lint silencing */
-/*   means ``i know this function returns something,
- but I really, really do mean to  it */
-
-/* prototypes are another problem.  If they are available, they should be
- used; but if they are not available their use will cause compiler errors.
- To get around this we define a lot of symbols which become nothing if
- prototypes aren't available */
-# ifdef PROTO
-
 # define X ,
 # define OBJ object
 # define OBJP object *
@@ -65,20 +37,3 @@ typedef int boolean;
 # define NOARGS void
 # define FILEP FILE *
 # define FUNC ()
-
-# endif
-
-# ifndef PROTO
-
-# define X
-# define OBJ
-# define OBJP
-# define INT
-# define BOOL
-# define STR
-# define FLOAT
-# define NOARGS
-# define FILEP
-# define FUNC
-
-# endif
