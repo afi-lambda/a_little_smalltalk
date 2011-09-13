@@ -145,7 +145,7 @@ fileIn(FILE *fd, boolean printit)
 		lexinit(textBuffer);
 		if (token == inputend)
 			; /* do nothing, get next line */
-		else if ((token == binary) && streq(tokenString, "*"))
+		else if ((token == binary) && streq(tokenString, "\""))
 			; /* do nothing, its a comment */
 		else if ((token == nameconst) && streq(tokenString, "Class"))
 			readClassDeclaration();

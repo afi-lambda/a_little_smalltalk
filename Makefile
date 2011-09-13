@@ -2,12 +2,13 @@ CFILES = st.c memory.c names.c news.c interp.c tty.c primitive.c filein.c lex.c 
 
 CFLAGS=-O0 -g
 
-all: lsti
+all: image
 
 lsti:
 	gcc -o $@ $(CFLAGS) $(CFILES) -lm
 
 image: lsti
+	@echo Creating initial image . . .
 	./lsti stlib/*
 
 clean:

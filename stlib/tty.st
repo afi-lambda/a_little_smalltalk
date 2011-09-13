@@ -1,10 +1,10 @@
-*
-* Little Smalltalk, version 3
-* Written by Tim Budd, Oregon State University, July 1988
-*
-*  methods for the unix front end - single process version
-*
-*
+"															"
+" Little Smalltalk, version 3								"
+" Written by Tim Budd, Oregon State University, July 1988	"
+"															"
+"  methods for the unix front end - single process version	"
+"															"
+"															"
 Methods Class 'all'
 	addMethod	| m |
 		m <- Method new; text: ''.
@@ -85,11 +85,11 @@ Methods String 'all'
 	print
 		stdout print: self
 ]
-*
-* initialization code
-* this is executed once, by the initial image maker
-*
-*
+"														"
+" initialization code									"
+" this is executed once, by the initial image maker		"
+"														"
+"														"
 Methods Smalltalk 'doit'
 	error: aString
 		" print a message, and remove current process "

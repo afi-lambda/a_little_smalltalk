@@ -1,9 +1,9 @@
-*
-* Little Smalltalk, version 3
-* basic methods needed for execution, including
-*	object creation
-*	block creation, execution and return
-*
+" 													"
+" Little Smalltalk, version 3						"
+" basic methods needed for execution, including		"
+"	object creation									"
+"	block creation, execution and return			"
+"													"
 Class Object
 Class Block Object context argCount argLoc bytePointer
 Class Boolean Object
@@ -17,7 +17,7 @@ Class Smalltalk Object
 Class Switch Object const notdone
 Class Symbol Object
 Class UndefinedObject Object
-*
+" "
 Methods Block 'initialization'
 	checkArgumentCount: count
 		^ (argCount = count)

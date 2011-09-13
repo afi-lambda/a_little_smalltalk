@@ -1,16 +1,16 @@
-*
-* Little Smalltalk, version 3
-* Written by Tim Budd, Oregon State University, January 1989
-*
-*  methods for dealing with files
-*   these are independent of the stdio package, 
-*    work in all systems
-*
-*  a global variable "files" maintains all currently opened files
-*  these are reopened on system initialization time
-*
+"																	"
+" Little Smalltalk, version 3										"
+" Written by Tim Budd, Oregon State University, January 1989		"
+"																	"
+"  methods for dealing with files									"
+"   these are independent of the stdio package, 					"
+"    work in all systems											"
+"																	"
+"  a global variable 'files' maintains all currently opened files	"
+"  these are reopened on system initialization time					"
+"																	"
 Class File Object name number mode
-*
+" "
 Methods File 'all'
 	asString	| text line |
 		text <- ''.

@@ -1,9 +1,9 @@
-*
-* Little Smalltalk, version 3
-* Written by Tim Budd, Oregon State University, July 1988
-*
-* Classes dealing with objects having Magnitude
-*
+"															"
+" Little Smalltalk, version 3								"
+" Written by Tim Budd, Oregon State University, July 1988	"
+"															"
+" Classes dealing with objects having Magnitude				"
+"															"
 Class Magnitude Object
 Class    Char Magnitude value
 Class    Number Magnitude
@@ -12,7 +12,7 @@ Class           LongInteger Integer negative digits
 Class       Fraction Number top bottom
 Class       Float Number
 Class Random Object
-*
+" "
 Methods Object 'magnitude'
 	isNumber
 		^ false

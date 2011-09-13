@@ -1,9 +1,9 @@
-*
-* Little Smalltalk, version 3
-* Written by Tim Budd, Oregon State University, July 1988
-*
-* methods for Collection classes
-*
+"															"
+" Little Smalltalk, version 3								"
+" Written by Tim Budd, Oregon State University, July 1988	"
+"															"
+" methods for Collection classes							"
+"															"
 Class Link Object key value nextLink
 Class Collection Magnitude
 Class    IndexedCollection Collection
@@ -14,7 +14,7 @@ Class       Dictionary IndexedCollection hashTable
 Class    Interval Collection lower upper step
 Class    List Collection links
 Class       Set List
-*
+" "
 Methods Array 'all'
 	< coll
 		(coll isKindOf: Array)

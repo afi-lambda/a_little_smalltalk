@@ -1,12 +1,12 @@
-*
-* Little Smalltalk, version 3
-* Written by Tim Budd, Oregon State University, July 1988
-*
-* multiprocess scheduler 
-*
-* if event driven interface (stdwin) is used the event manager sits
-*  below the multiprocess scheduler
-*
+"																	"
+" Little Smalltalk, version 3										"
+" Written by Tim Budd, Oregon State University, July 1988			"
+"																	"
+" multiprocess scheduler 											"
+"																	"
+" if event driven interface (stdwin) is used the event manager sits	"
+"  below the multiprocess scheduler									"
+"																	"
 Class Process Object stack stackTop linkPointer
 Class Scheduler Object notdone processList currentProcess
 Class Semaphore Object count processList
