@@ -5,7 +5,7 @@ CFLAGS=-O0 -g
 all: image
 
 lsti:
-	gcc -o $@ $(CFLAGS) $(CFILES) -lm
+	gcc -o $@ $(CFLAGS) $(addprefix src/, $(CFILES)) -lm
 
 image: lsti
 	@echo Creating initial image . . .

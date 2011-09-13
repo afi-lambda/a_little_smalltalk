@@ -12,7 +12,7 @@
 #include "lex.h"
 #include <string.h>
 
-# define MethodTableSize 39
+#define MethodTableSize 39
 
 /*
  the following are switch settings, with default values
