@@ -14,7 +14,7 @@
 #include "interp.h"
 #include "filein.h"
 
-struct {
+struct dummyo {
 	int di;
 	object cl;
 	short ds;
