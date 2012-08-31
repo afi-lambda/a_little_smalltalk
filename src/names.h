@@ -42,30 +42,23 @@
 # define stackTopInProcess 2
 # define linkPtrInProcess 3
 
-extern object trueobj; /* the pseudo variable true */
-extern object falseobj; /* the pseudo variable false */
+void nameTableInsert(object dict, int hash, object key, object value);
 
-extern object getClass(register object obj);
-extern object copyFrom(object obj, int start, int size);
-extern object newArray( INT);
-extern object newBlock();
-extern object newByteArray( INT);
-extern object newClass( STR);
-extern object newChar( INT);
-extern object newContext(int link, object method, object args, object temp);
-extern object newDictionary( INT);
-extern object newFloat( FLOAT);
-extern object newMethod();
-extern object newLink(object key, object value);
-extern object newStString( STR);
-extern object newSymbol( STR);
-extern double floatValue(object o);
-extern void initCommonSymbols(); /* common symbols */
-extern object unSyms[], binSyms[];
+object hashEachElement(object dict, register int hash, int(*fun)(object));
 
-extern void nameTableInsert(object dict, int hash, object key, object value);
-/*extern object hashEachElement( OBJ X INT X INT FUNC );*/
-extern int strHash( STR);
-extern object globalKey( STR);
-extern object nameTableLookup(object dict, char *str);
+/* compute hash value of string ---- strHash */
+int strHash(const char *str);
+
+/* test for string equality ---- strTest */
+static int strTest(object key);
+/* return key associated with global symbol */
+object globalKey(const char *str);
+object nameTableLookup(object dict, const char *str);
+
+/* initialize common symbols used by the parser and interpreter */
+void initCommonSymbols();
+
+extern object unSyms[12];
+extern object binSyms[30];
+
 # define globalSymbol(s) nameTableLookup(symbols, s)

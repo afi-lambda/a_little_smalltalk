@@ -12,6 +12,9 @@
  or using a define statement.  Either one will work (check this?)
  */
 
+#ifndef _MEMORY_H
+#define _MEMORY_H
+
 typedef short object;
 
 /*
@@ -27,7 +30,7 @@ typedef short object;
  */
 
 struct objectStruct {
-	object class;
+	object STclass;
 	short referenceCount;
 	short size;
 	object *memory;
@@ -72,9 +75,9 @@ extern void decr( OBJ );
  again, these may be macros, or they may be actual procedure calls
  */
 
-extern object allocObject( INT);
-extern object allocByte( INT);
-extern object allocStr( STR);
+object allocObject(int memorySize);
+object allocByte(int size);
+object allocStr(register const char *str);
 
 /*
  integer objects are (but need not be) treated specially.
@@ -136,7 +139,7 @@ extern void byteAtPut(object z, int i, int x);
  class fields and size fields of objects
  */
 
-# define classField(x) objectTable[x>>1].class
+# define classField(x) objectTable[x>>1].STclass
 # define setClass(x,y) incr(classField(x)=y)
 # define sizeField(x) objectTable[x>>1].size
 
@@ -175,9 +178,14 @@ extern object symbols;
 /*
  finally some external declarations with prototypes
  */
-extern void sysError(STR X STR);
-extern void dspMethod(STR X STR);
+
 extern void initMemoryManager( NOARGS);
 extern void imageWrite( FILEP);
 extern void imageRead( FILEP);
 extern boolean debugging;
+
+void setFreeLists();
+void visit(register object x) ;
+
+void sysDecr(object z);
+#endif

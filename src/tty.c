@@ -16,37 +16,37 @@
 extern boolean parseok;
 
 /* report a fatal system error */
-void sysError(char *s1, char *s2)
+void sysError(const char *s1, const char *s2)
 {
 	 fprintf(stderr, "%s\n%s\n", s1, s2);
 	 abort();
 }
 
 /* report a nonfatal system error */
-void sysWarn(char *s1, char *s2)
+void sysWarn(const char *s1, const char *s2)
 {
 	 fprintf(stderr, "%s\n%s\n", s1, s2);
 }
 
-compilWarn(char *selector, char *str1, char *str2)
+void compilWarn(const char *selector, const char *str1, const char *str2)
 {
 	 fprintf(stderr, "compiler warning: Method %s : %s %s\n", selector,
 			str1, str2);
 }
 
-compilError(char *selector, char *str1, char *str2)
+void compilError(const char *selector, const char *str1, const char *str2)
 {
 	 fprintf(stderr, "compiler error: Method %s : %s %s\n", selector,
 			str1, str2);
 	parseok = false;
 }
 
-void dspMethod(char *cp, char *mp)
+void dspMethod(const char *cp, const char *mp)
 {
 	/* fprintf(stderr,"%s %s\n", cp, mp);*/
 }
 
-givepause() {
+void givepause() {
 	char buffer[80];
 
 	 fprintf(stderr, "push return to continue\n");

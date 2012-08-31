@@ -11,6 +11,7 @@
 #include "env.h"
 #include "memory.h"
 #include "names.h"
+#include "news.h"
 
 static object arrayClass = nilobj; /* the class Array */
 static object intClass = nilobj; /* the class Integer */
@@ -18,7 +19,7 @@ static object stringClass = nilobj; /* the class String */
 static object symbolClass = nilobj; /* the class Symbol */
 
 /* ncopy - copy exactly n bytes from place to place */
-ncopy(register char *p, register char *q, register int n) {
+void ncopy(register char *p, register char *q, register int n) {
 	for (; n > 0; n--)
 		*p++ = *q++;
 }
@@ -68,7 +69,7 @@ object newChar(int value) {
 	return (newobj);
 }
 
-object newClass(char *name) {
+object newClass(const char *name) {
 	object newObj, nameObj;
 
 	newObj = allocObject(classSize);
@@ -151,7 +152,7 @@ object newMethod() {
 	return newObj;
 }
 
-object newStString(char *value) {
+object newStString(const char *value) {
 	object newObj;
 
 	newObj = allocStr(value);
@@ -161,7 +162,7 @@ object newStString(char *value) {
 	return (newObj);
 }
 
-object newSymbol(char *str) {
+object newSymbol(const char *str) {
 	object newObj;
 
 	/* first see if it is already there */

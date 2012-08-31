@@ -9,6 +9,10 @@
 #include "env.h"
 #include "memory.h"
 #include "names.h"
+#include "tty.h"
+#include "news.h"
+#include "interp.h"
+#include "filein.h"
 
 struct {
 	int di;
@@ -35,7 +39,7 @@ static int fr(FILE *fp, char *p, int s) {
 
 void imageRead(FILE *fp) {
 	short i, size;
-	object *mBlockAlloc();
+	//object *mBlockAlloc();
 
 	 fr(fp, (char *) &symbols, sizeof(object));
 	i = 0;
@@ -45,8 +49,8 @@ void imageRead(FILE *fp) {
 
 		if ((i < 0) || (i > ObjectTableMax))
 			sysError("reading index out of range", "");
-		objectTable[i].class = dummyObject.cl;
-		if ((objectTable[i].class < 0) || ((objectTable[i].class >> 1)
+		objectTable[i].STclass = dummyObject.cl;
+		if ((objectTable[i].STclass < 0) || ((objectTable[i].STclass >> 1)
 				> ObjectTableMax)) {
 			fprintf(stderr, "index %d\n", dummyObject.cl);
 			sysError("class out of range", "imageRead");
@@ -73,7 +77,7 @@ void imageRead(FILE *fp) {
  imageWrite - write out an object image
  */
 
-static fw(FILE *fp, char *p, int s) {
+static void fw(FILE *fp, char *p, int s) {
 	if (fwrite(p, s, 1, fp) != 1) {
 		sysError("imageWrite size error", "");
 	}
@@ -87,7 +91,7 @@ void imageWrite(FILE *fp) {
 	for (i = 0; i < ObjectTableMax; i++) {
 		if (objectTable[i].referenceCount > 0) {
 			dummyObject.di = i;
-			dummyObject.cl = objectTable[i].class;
+			dummyObject.cl = objectTable[i].STclass;
 			dummyObject.ds = size = objectTable[i].size;
 			fw(fp, (char *) &dummyObject, sizeof(dummyObject));
 			if (size < 0)

@@ -21,14 +21,14 @@ double tokenFloat; /* floating point value of token */
 
 /* local variables used only by lexical analyser */
 
-static char *cp; /* character pointer */
+static const char *cp; /* character pointer */
 static char pushBuffer[10]; /* pushed back buffer */
 static int pushindex; /* index of last pushed back char */
 static char cc; /* current character */
 static long longresult; /* value used when building int tokens */
 
 /* lexinit - initialize the lexical analysis routines */
-void lexinit(char *str)
+void lexinit(const char *str)
 {
 	pushindex = 0;
 	cp = str;
@@ -37,7 +37,7 @@ void lexinit(char *str)
 }
 
 /* pushBack - push one character back into the input */
-static pushBack(char c)
+static void pushBack(char c)
 {
 	pushBuffer[pushindex++] = c;
 }

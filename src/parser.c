@@ -30,6 +30,9 @@
 #include "interp.h"
 #include "lex.h"
 #include <string.h>
+#include "tty.h"
+#include "news.h"
+#include "parser.h"
 
 /* all of the following limits could be increased (up to
  256) without any trouble.  They are kept low
@@ -62,14 +65,7 @@ enum blockstatus {
 	NotInBlock, InBlock, OptimizedBlock
 } blockstat;
 
-static parsePrimitive();
-static genMessage(boolean toSuper, int argumentCount, object messagesym);
-static block();
-static assignment(char *name);
-static expression();
-static body();
-
-setInstanceVariables(object aClass) {
+void setInstanceVariables(object aClass) {
 	int i, limit;
 	object vars;
 
@@ -86,7 +82,7 @@ setInstanceVariables(object aClass) {
 	}
 }
 
-static genCode(int value)
+static void genCode(int value)
 {
 	if (codeTop >= codeLimit)
 		compilError(selector, "too many bytecode instructions in method", "");
@@ -94,7 +90,7 @@ static genCode(int value)
 		codeArray[codeTop++] = value;
 }
 
-static genInstruction(int high, int low)
+static void genInstruction(int high, int low)
 {
 	if (low >= 16) {
 		genInstruction(Extended, high);
@@ -115,7 +111,7 @@ static int genLiteral(object aLiteral)
 }
 
 /* generate an integer push */
-static genInteger(int val)
+static void genInteger(int val)
 {
 	if (val == -1)
 		genInstruction(PushConstant, minusOne);
@@ -125,7 +121,7 @@ static genInteger(int val)
 		genInstruction(PushLiteral, genLiteral(newInteger(val)));
 }
 
-static char *glbsyms[] = { "currentInterpreter", "nil", "true", "false", 0 };
+static const char *glbsyms[] = { "currentInterpreter", "nil", "true", "false", 0 };
 
 static boolean nameTerm(char *name)
 {
@@ -318,7 +314,7 @@ static boolean term() {
 	return (superTerm);
 }
 
-static parsePrimitive() {
+static void parsePrimitive() {
 	int primitiveNumber, argumentCount;
 
 	if (nextToken() != intconst)
@@ -335,7 +331,7 @@ static parsePrimitive() {
 	 nextToken();
 }
 
-static genMessage(boolean toSuper, int argumentCount, object messagesym) {
+static void genMessage(boolean toSuper, int argumentCount, object messagesym) {
 	boolean sent = false;
 	int i;
 
@@ -499,7 +495,7 @@ static boolean keyContinuation(boolean superReceiver)
 	return (superReceiver);
 }
 
-static continuation(boolean superReceiver)
+static void continuation(boolean superReceiver)
 {
 	superReceiver = keyContinuation(superReceiver);
 
@@ -511,7 +507,7 @@ static continuation(boolean superReceiver)
 	}
 }
 
-static expression() {
+static void expression() {
 	boolean superTerm;
 	char assignname[60];
 
@@ -532,7 +528,7 @@ static expression() {
 	}
 }
 
-static assignment(char *name) {
+static void assignment(char *name) {
 	int i;
 	boolean done;
 
@@ -562,7 +558,7 @@ static assignment(char *name) {
 	}
 }
 
-static statement() {
+static void statement() {
 
 	if ((token == binary) && streq(tokenString, "^")) {
 		 nextToken();
@@ -579,7 +575,7 @@ static statement() {
 	}
 }
 
-static body() {
+static void body() {
 	/* empty blocks are same as nil */
 	if ((blockstat == InBlock) || (blockstat == OptimizedBlock))
 		if ((token == closing) && streq(tokenString, "]")) {
@@ -608,7 +604,7 @@ static body() {
 	}
 }
 
-static block() {
+static void block() {
 	int saveTemporary, argumentCount, fixLocation;
 	object tempsym, newBlk;
 	enum blockstatus savebstat;
@@ -663,7 +659,7 @@ static block() {
 	blockstat = savebstat;
 }
 
-static temporaries() {
+static void temporaries() {
 	object tempsym;
 
 	temporaryTop = 0;
@@ -687,7 +683,7 @@ static temporaries() {
 	}
 }
 
-static messagePattern() {
+static void messagePattern() {
 	object argsym;
 
 	argumentTop = 0;
@@ -720,7 +716,7 @@ static messagePattern() {
 		compilError(selector, "illegal message selector", tokenString);
 }
 
-boolean parse(object method, char *text, boolean savetext) {
+boolean parse(object method, const char *text, boolean savetext) {
 	int i;
 	object bytecodes, theLiterals;
 	byte *bp;

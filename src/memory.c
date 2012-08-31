@@ -35,6 +35,7 @@
 # include <string.h>
 
 #include <stdlib.h>
+#include "tty.h"
 
 boolean debugging = false;
 object sysobj; /* temporary used to avoid rereference in macros */
@@ -113,7 +114,7 @@ void initMemoryManager() {
 }
 
 /* setFreeLists - initialise the free lists */
-setFreeLists() {
+void setFreeLists() {
 	int i, size;
 	register int z;
 	register struct objectStruct *p;
@@ -127,7 +128,7 @@ setFreeLists() {
 			size = p->size;
 			if (size < 0)
 				size = ((-size) + 1) / 2;
-			p->class = objectFreeList[size];
+			p->STclass = objectFreeList[size];
 			objectFreeList[size] = z;
 			for (i = size; i > 0;)
 				p->memory[--i] = nilobj;
@@ -177,13 +178,13 @@ object allocObject(int memorySize) {
 
 	/* first try the free lists, this is fastest */
 	if ((position = objectFreeList[memorySize]) != 0) {
-		objectFreeList[memorySize] = objectTable[position].class;
+		objectFreeList[memorySize] = objectTable[position].STclass;
 	}
 
 	/* if not there, next try making a size zero object and
 	 making it bigger */
 	else if ((position = objectFreeList[0]) != 0) {
-		objectFreeList[0] = objectTable[position].class;
+		objectFreeList[0] = objectTable[position].STclass;
 		objectTable[position].size = memorySize;
 		objectTable[position].memory = mBlockAlloc(memorySize);
 	}
@@ -194,7 +195,7 @@ object allocObject(int memorySize) {
 		/* first try making a bigger object smaller */
 		for (i = memorySize + 1; i < FREELISTMAX; i++)
 			if ((position = objectFreeList[i]) != 0) {
-				objectFreeList[i] = objectTable[position].class;
+				objectFreeList[i] = objectTable[position].STclass;
 				/* just trim it a bit */
 				objectTable[position].size = memorySize;
 				done = true;
@@ -205,7 +206,7 @@ object allocObject(int memorySize) {
 		if (!done)
 			for (i = 1; i < memorySize; i++)
 				if ((position = objectFreeList[i]) != 0) {
-					objectFreeList[i] = objectTable[position].class;
+					objectFreeList[i] = objectTable[position].STclass;
 					objectTable[position].size = memorySize;
 # ifdef mBlockAlloc
 					free(objectTable[position].memory);
@@ -223,7 +224,7 @@ object allocObject(int memorySize) {
 
 	/* set class and type */
 	objectTable[position].referenceCount = 0;
-	objectTable[position].class = nilobj;
+	objectTable[position].STclass = nilobj;
 	objectTable[position].size = memorySize;
 	return (position << 1);
 }
@@ -237,7 +238,7 @@ object allocByte(int size) {
 	return newObj;
 }
 
-object allocStr(register char *str) {
+object allocStr(register const char *str) {
 	register object newSym;
 
 	newSym = allocByte(1 + strlen(str));
@@ -269,7 +270,7 @@ void decr(object z)
 # endif
 
 /* do the real work in the decr procedure */
-sysDecr(object z) {
+void sysDecr(object z) {
 	register struct objectStruct *p;
 	register int i;
 	int size;
@@ -279,11 +280,11 @@ sysDecr(object z) {
 		fprintf(stderr, "object %d\n", z);
 		sysError("negative reference count", "");
 	}
-	decr(p->class);
+	decr(p->STclass);
 	size = p->size;
 	if (size < 0)
 		size = ((-size) + 1) / 2;
-	p->class = objectFreeList[size];
+	p->STclass = objectFreeList[size];
 	objectFreeList[size] = z >> 1;
 	if (size > 0) {
 		if (p->size > 0)
@@ -391,14 +392,14 @@ void byteAtPut(object z, int i, int x) {
  reference counts as the mark
  */
 
-visit(register object x) {
+void visit(register object x) {
 	int i, s;
 	object *p;
 
 	if (x && !isInteger(x)) {
 		if (++(objectTable[x >> 1].referenceCount) == 1) {
 			/* then it's the first time we've visited it, so: */
-			visit(objectTable[x >> 1].class);
+			visit(objectTable[x >> 1].STclass);
 			s = sizeField(x);
 			if (s > 0) {
 				p = objectTable[x >> 1].memory;

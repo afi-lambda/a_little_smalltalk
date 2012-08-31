@@ -32,6 +32,10 @@
 #include <string.h>
 #include <signal.h>
 #include <setjmp.h>
+#include "tty.h"
+#include "news.h"
+#include "interp.h"
+#include "parser.h"
 
 extern object processStack;
 extern int linkPointer;
@@ -42,11 +46,12 @@ extern object ioPrimitive(INT X OBJP);
 extern object sysPrimitive(INT X OBJP);
 
 static jmp_buf jb;
-void brkfun() {
+void brkfun(int sig) {
 	longjmp(jb, 1);
 }
-void brk() {
-	;
+
+void brkdum(int sig) {
+    brk(NULL);
 }
 
 static object zeroaryPrims(int number)
@@ -162,7 +167,7 @@ static int unaryPrims(int number, object firstarg)
 		/* then restore previous environment */
 		processStack = saveProcessStack;
 		linkPointer = saveLinkPointer;
-		signal(SIGINT, brk);
+		signal(SIGINT, brkdum);
 		break;
 
 	default: /* unknown primitive */

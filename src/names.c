@@ -25,10 +25,13 @@
  nil, true, false, and various classes.
  */
 
-# include <stdio.h>
-# include "env.h"
-# include "memory.h"
-# include "names.h"
+#include <stdio.h>
+#include "env.h"
+#include "memory.h"
+#include "names.h"
+#include "tty.h"
+#include "news.h"
+#include "interp.h"
 
 void nameTableInsert(object dict, int hash, object key, object value) {
 	object table, link, nwLink, nextLink, tablentry;
@@ -94,10 +97,10 @@ object hashEachElement(object dict, register int hash, int(*fun)(object)) {
 }
 
 /* compute hash value of string ---- strHash */
-int strHash(char *str)
+int strHash(const char *str)
 {
 	register int hash;
-	register char *p;
+	register const char *p;
 
 	hash = 0;
 	for (p = str; *p; p++)
@@ -111,7 +114,7 @@ int strHash(char *str)
 }
 
 static object objBuffer;
-static char *charBuffer;
+static const char *charBuffer;
 
 /* test for string equality ---- strTest */
 static int strTest(object key)
@@ -124,7 +127,7 @@ static int strTest(object key)
 }
 
 /* return key associated with global symbol */
-object globalKey(char *str)
+object globalKey(const char *str)
 {
 	objBuffer = nilobj;
 	charBuffer = str;
@@ -132,7 +135,7 @@ object globalKey(char *str)
 	return objBuffer;
 }
 
-object nameTableLookup(object dict, char *str)
+object nameTableLookup(object dict, const char *str)
 {
 	charBuffer = str;
 	return hashEachElement(dict, strHash(str), strTest);
@@ -141,10 +144,10 @@ object nameTableLookup(object dict, char *str)
 object unSyms[12];
 object binSyms[30];
 
-char *unStrs[] = { "isNil", "notNil", "value", "new", "class", "size",
+const char *unStrs[] = { "isNil", "notNil", "value", "new", "class", "size",
 		"basicSize", "print", "printString", 0 };
 
-char *binStrs[] = { "+", "-", "<", ">", "<=", ">=", "=", "~=", "*", "quo:",
+const char *binStrs[] = { "+", "-", "<", ">", "<=", ">=", "=", "~=", "*", "quo:",
 		"rem:", "bitAnd:", "bitXor:", "==", ",", "at:", "basicAt:", "do:",
 		"coerce:", "error:", "includesKey:", "isMemberOf:", "new:", "to:",
 		"value:", "whileTrue:", "addFirst:", "addLast:", 0 };

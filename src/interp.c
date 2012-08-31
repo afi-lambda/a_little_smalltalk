@@ -18,6 +18,8 @@
 #include "memory.h"
 #include "names.h"
 #include "interp.h"
+#include "tty.h"
+#include "news.h"
 
 object trueobj, falseobj;
 boolean watching = 0;
@@ -44,11 +46,11 @@ static struct {
 } methodCache[cacheSize];
 
 /* flush an entry from the cache (usually when its been recompiled) */
-flushCache(object messageToSend, object class)
+void flushCache(object messageToSend, object STclass)
 {
 	int hash;
 
-	hash = (((int) messageToSend) + ((int) class)) / cacheSize;
+	hash = (((int) messageToSend) + ((int) STclass)) / cacheSize;
 	methodCache[hash].cacheMessage = nilobj;
 }
 

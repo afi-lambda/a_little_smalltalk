@@ -11,6 +11,9 @@
 #include "names.h"
 #include "lex.h"
 #include <string.h>
+#include "tty.h"
+#include "news.h"
+#include "parser.h"
 
 #define MethodTableSize 39
 
@@ -48,7 +51,7 @@ static object findClass(char *name)
 /*
  readDeclaration reads a declaration of a class
  */
-static readClassDeclaration() {
+static void readClassDeclaration() {
 	object classObj, super, vars;
 	int i, size, instanceTop;
 	object instanceVariables[15];
@@ -82,7 +85,7 @@ static readClassDeclaration() {
 /*
  readClass reads a class method description
  */
-static readMethods(FILE *fd, boolean printit)
+static void readMethods(FILE *fd, boolean printit)
 {
 	object classObj, methTable, theMethod, selector;
 # define LINEBUFFERSIZE 512
@@ -139,7 +142,7 @@ static readMethods(FILE *fd, boolean printit)
 /*
  fileIn reads in a module definition
  */
-fileIn(FILE *fd, boolean printit)
+void fileIn(FILE *fd, boolean printit)
 {
 	while (fgets(textBuffer, TextBufferSize, fd) != NULL) {
 		lexinit(textBuffer);

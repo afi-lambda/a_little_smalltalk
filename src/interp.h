@@ -6,6 +6,9 @@
  symbolic definitions for the bytecodes
  */
 
+#ifndef _INTERP_H
+#define _INTERP_H
+
 # define Extended 0
 # define PushInstance 1
 # define PushArgument 2
@@ -40,3 +43,23 @@
 # define AndBranch 9
 # define OrBranch 10
 # define SendToSuper 11
+
+static int messTest(object obj);
+
+/* flush an entry from the cache (usually when its been recompiled) */
+void flushCache(object messageToSend, object STclass);
+
+/*
+ findMethod
+ given a message and a class to start looking in,
+ find the method associated with the message
+ */
+static boolean findMethod(object *methodClassLocation);
+
+static object growProcessStack(int top, int toadd);
+
+boolean execute(object aProcess, int maxsteps);
+
+extern object trueobj, falseobj;
+
+#endif

@@ -9,10 +9,13 @@
 #include "env.h"
 #include "memory.h"
 #include "names.h"
+#include "tty.h"
+#include "interp.h"
+#include "st.h"
+#include "news.h"
+#include "parser.h"
 
-
-static makeInitialImage();
-static goDoIt(char *text);
+static void makeInitialImage();
 
 int initial = 0; /* not making initial image */
 
@@ -86,13 +89,13 @@ main(int argc, char **argv)
 	return 0;
 }
 
-static goDoIt(char *text) {
+static void goDoIt(const char *text) {
 	object process, stack, method;
 
 	method = newMethod();
 	incr(method);
 	setInstanceVariables(nilobj);
-	 parse(method, text, false);
+	parse(method, text, false);
 
 	process = allocObject(processSize);
 	incr(process);
@@ -122,7 +125,7 @@ static goDoIt(char *text) {
  there is a sort of chicken and egg problem with regards to making
  the initial image
  */
-static makeInitialImage() {
+static void makeInitialImage() {
 	object hashTable;
 	object symbolObj, symbolClass, classClass;
 

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="84">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df name="a_little_smalltalk" root=".">
+      <df name="src">
+        <in>env.h</in>
+        <in>filein.c</in>
+        <in>filein.h</in>
+        <in>interp.c</in>
+        <in>interp.h</in>
+        <in>lex.c</in>
+        <in>lex.h</in>
+        <in>memory.c</in>
+        <in>memory.h</in>
+        <in>names.c</in>
+        <in>names.h</in>
+        <in>news.c</in>
+        <in>news.h</in>
+        <in>parser.c</in>
+        <in>parser.h</in>
+        <in>primitive.c</in>
+        <in>st.c</in>
+        <in>st.h</in>
+        <in>tty.c</in>
+        <in>tty.h</in>
+        <in>unixio.c</in>
+      </df>
+      <df name="stlib">
+      </df>
+      <df name="test">
+      </df>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+      </toolsSet>
+      <codeAssistance>
+      </codeAssistance>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>.</buildCommandWorkingDir>
+          <buildCommand>${MAKE} -f Makefile</buildCommand>
+          <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
+          <executablePath></executablePath>
+          <cTool>
+            <incDir>
+              <pElem>/usr/include/c++/4.6/i686-linux-gnu</pElem>
+              <pElem>/usr/include/c++/4.6</pElem>
+              <pElem>.</pElem>
+            </incDir>
+          </cTool>
+        </makeTool>
+      </makefileType>
+    </conf>
+  </confs>
+</configurationDescriptor>
