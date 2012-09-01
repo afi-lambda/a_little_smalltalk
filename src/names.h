@@ -49,8 +49,6 @@ object hashEachElement(object dict, register int hash, int(*fun)(object));
 /* compute hash value of string ---- strHash */
 int strHash(const char *str);
 
-/* test for string equality ---- strTest */
-static int strTest(object key);
 /* return key associated with global symbol */
 object globalKey(const char *str);
 object nameTableLookup(object dict, const char *str);

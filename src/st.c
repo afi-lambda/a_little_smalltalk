@@ -21,7 +21,7 @@ int initial = 0; /* not making initial image */
 
 extern int objectCount();
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	FILE *fp;
 	object firstProcess;

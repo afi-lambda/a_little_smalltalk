@@ -258,7 +258,7 @@ static int binaryPrims(int number, object firstarg, object secondarg)
 static int trinaryPrims(int number, object firstarg, object secondarg, object thirdarg)
 {
 	char *bp, *tp, buffer[256];
-	int i, j;
+	unsigned int i, j;
 	object returnedObject;
 
 	returnedObject = firstarg;

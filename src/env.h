@@ -2,7 +2,8 @@
  Little Smalltalk, version two
  Written by Tim Budd, Oregon State University, July 1987
 
-/*=============== rules for various systems ====================*/
+ =============== rules for various systems ====================
+*/
 
 #include <stdlib.h>
 #include <string.h>

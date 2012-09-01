@@ -61,6 +61,13 @@ static char *instanceName[instanceLimit];
 static int maxTemporary; /* highest temporary see so far */
 static char selector[80]; /* message selector */
 
+//Forward decleration
+static void parsePrimitive();
+static void genMessage(boolean toSuper, int argumentCount, object messagesym);
+static void expression();
+static void assignment(char *name);
+static void body();
+
 enum blockstatus {
 	NotInBlock, InBlock, OptimizedBlock
 } blockstat;
@@ -247,11 +254,13 @@ static int parseArray() {
 	}
 
 	if (parseok)
+        {
 		if (!streq(tokenString, ")"))
 			compilError(selector, "array not terminated by right parenthesis",
 					tokenString);
 		else
 			 nextToken();
+        }
 	size = literalTop - base;
 	newLit = newArray(size);
 	for (i = size; i >= 1; i--) {
@@ -262,6 +271,61 @@ static int parseArray() {
 		literalTop = literalTop - 1;
 	}
 	return (genLiteral(newLit));
+}
+
+static void block() {
+	int saveTemporary, argumentCount, fixLocation;
+	object tempsym, newBlk;
+	enum blockstatus savebstat;
+
+	saveTemporary = temporaryTop;
+	savebstat = blockstat;
+	argumentCount = 0;
+	 nextToken();
+	if ((token == binary) && streq(tokenString, ":")) {
+		while (parseok && (token == binary) && streq(tokenString,":")) {
+			if (nextToken() != nameconst)
+				compilError(selector, "name must follow colon",
+						"in block argument list");
+			if (++temporaryTop > maxTemporary)
+				maxTemporary = temporaryTop;
+			argumentCount++;
+			if (temporaryTop > temporaryLimit)
+				compilError(selector, "too many temporaries in method", "");
+			else {
+				tempsym = newSymbol(tokenString);
+				temporaryName[temporaryTop] = charPtr(tempsym);
+			}
+			 nextToken();
+		}
+		if ((token != binary) || !streq(tokenString, "|"))
+			compilError(selector, "block argument list must be terminated",
+					"by |");
+		 nextToken();
+	}
+	newBlk = newBlock();
+	basicAtPut(newBlk, argumentCountInBlock, newInteger(argumentCount));
+	basicAtPut(newBlk, argumentLocationInBlock,
+			newInteger(saveTemporary + 1));
+	genInstruction(PushLiteral, genLiteral(newBlk));
+	genInstruction(PushConstant, contextConst);
+	genInstruction(DoPrimitive, 2);
+	genCode(29);
+	genInstruction(DoSpecial, Branch);
+	fixLocation = codeTop;
+	genCode(0);
+	/*genInstruction(DoSpecial, PopTop);*/
+	basicAtPut(newBlk, bytecountPositionInBlock, newInteger(codeTop+1));
+	blockstat = InBlock;
+	body();
+	if ((token == closing) && streq(tokenString, "]"))
+		 nextToken();
+	else
+		compilError(selector, "block not terminated by ]", "");
+	genInstruction(DoSpecial, StackReturn);
+	codeArray[fixLocation] = codeTop + 1;
+	temporaryTop = saveTemporary;
+	blockstat = savebstat;
 }
 
 static boolean term() {
@@ -300,10 +364,12 @@ static boolean term() {
 		 nextToken();
 		expression();
 		if (parseok)
+                {
 			if ((token != closing) || !streq(tokenString, ")"))
 				compilError(selector, "Missing Right Parenthesis", "");
 			else
 				 nextToken();
+                }
 	} else if ((token == binary) && streq(tokenString, "<"))
 		parsePrimitive();
 	else if ((token == binary) && streq(tokenString, "["))
@@ -602,61 +668,6 @@ static void body() {
 					tokenString);
 		}
 	}
-}
-
-static void block() {
-	int saveTemporary, argumentCount, fixLocation;
-	object tempsym, newBlk;
-	enum blockstatus savebstat;
-
-	saveTemporary = temporaryTop;
-	savebstat = blockstat;
-	argumentCount = 0;
-	 nextToken();
-	if ((token == binary) && streq(tokenString, ":")) {
-		while (parseok && (token == binary) && streq(tokenString,":")) {
-			if (nextToken() != nameconst)
-				compilError(selector, "name must follow colon",
-						"in block argument list");
-			if (++temporaryTop > maxTemporary)
-				maxTemporary = temporaryTop;
-			argumentCount++;
-			if (temporaryTop > temporaryLimit)
-				compilError(selector, "too many temporaries in method", "");
-			else {
-				tempsym = newSymbol(tokenString);
-				temporaryName[temporaryTop] = charPtr(tempsym);
-			}
-			 nextToken();
-		}
-		if ((token != binary) || !streq(tokenString, "|"))
-			compilError(selector, "block argument list must be terminated",
-					"by |");
-		 nextToken();
-	}
-	newBlk = newBlock();
-	basicAtPut(newBlk, argumentCountInBlock, newInteger(argumentCount));
-	basicAtPut(newBlk, argumentLocationInBlock,
-			newInteger(saveTemporary + 1));
-	genInstruction(PushLiteral, genLiteral(newBlk));
-	genInstruction(PushConstant, contextConst);
-	genInstruction(DoPrimitive, 2);
-	genCode(29);
-	genInstruction(DoSpecial, Branch);
-	fixLocation = codeTop;
-	genCode(0);
-	/*genInstruction(DoSpecial, PopTop);*/
-	basicAtPut(newBlk, bytecountPositionInBlock, newInteger(codeTop+1));
-	blockstat = InBlock;
-	body();
-	if ((token == closing) && streq(tokenString, "]"))
-		 nextToken();
-	else
-		compilError(selector, "block not terminated by ]", "");
-	genInstruction(DoSpecial, StackReturn);
-	codeArray[fixLocation] = codeTop + 1;
-	temporaryTop = saveTemporary;
-	blockstat = savebstat;
 }
 
 static void temporaries() {

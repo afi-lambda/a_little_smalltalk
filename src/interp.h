@@ -44,7 +44,7 @@
 # define OrBranch 10
 # define SendToSuper 11
 
-static int messTest(object obj);
+//static int messTest(object obj);
 
 /* flush an entry from the cache (usually when its been recompiled) */
 void flushCache(object messageToSend, object STclass);
@@ -54,9 +54,9 @@ void flushCache(object messageToSend, object STclass);
  given a message and a class to start looking in,
  find the method associated with the message
  */
-static boolean findMethod(object *methodClassLocation);
+//static boolean findMethod(object *methodClassLocation);
 
-static object growProcessStack(int top, int toadd);
+//static object growProcessStack(int top, int toadd);
 
 boolean execute(object aProcess, int maxsteps);
 
