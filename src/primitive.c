@@ -42,7 +42,7 @@ extern int linkPointer;
 
 extern double frexp(), ldexp();
 extern long time();
-extern object ioPrimitive( int , object*);
+object ioPrimitive( int , object*);
 extern object sysPrimitive(int , object*);
 
 static jmp_buf jb;

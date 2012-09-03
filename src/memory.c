@@ -23,12 +23,6 @@
 
 # include <stdio.h>
 
-# ifdef LIGHTC
-# include <unix.h>
-# include <storage.h>
-# include <proto.h>
-# endif
-
 # include "env.h"
 # include "memory.h"
 
@@ -245,19 +239,13 @@ object allocStr(register const char *str) {
         return (newSym);
 }
 
-# ifdef incr
-object incrobj; /* buffer for increment macro */
-# endif
-# ifndef incr
 void incr(object z)
 {
 	if (z && ! isInteger(z)) {
 		objectTable[z>>1].referenceCount++;
 	}
 }
-# endif
 
-# ifndef decr
 void decr(object z)
 {
 	if (z && ! isInteger(z)) {
@@ -266,7 +254,6 @@ void decr(object z)
 		}
 	}
 }
-# endif
 
 /* do the real work in the decr procedure */
 void sysDecr(object z) {

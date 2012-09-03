@@ -44,27 +44,8 @@ extern struct objectStruct *objectTable;
 extern struct objectStruct objectTable[];
 # endif
 
-/*
- The most basic routines to the memory manager are incr and decr,
- which increment and decrement reference counts in objects.  By separating
- decrement from memory freeing, we could replace these as procedure calls
- by using the following macros (thereby saving procedure calls):*/
-extern object incrobj;
-# define incr(x) if ((incrobj=(x))&&!isInteger(incrobj)) \
-objectTable[incrobj>>1].referenceCount++
-#  define decr(x) if (((incrobj=(x))&&!isInteger(incrobj))&&\
-(--objectTable[incrobj>>1].referenceCount<=0)) sysDecr(incrobj);
-/*
- notice that the argument x is first assigned to a global variable; this is
- in case evaluation of x results in side effects (such as assignment) which
- should not be repeated. */
-
-# ifndef incr
-extern void incr( OBJ );
-# endif
-# ifndef decr
-extern void decr( OBJ );
-# endif
+void incr(object z);
+void decr(object z);
 
 /*
  The next most basic routines in the memory module are those that
@@ -169,7 +150,7 @@ extern object sysobj;
  algorithm.
  */
 # ifndef mBlockAlloc
-extern object *mBlockAlloc(int);
+object *mBlockAlloc(int);
 # endif
 
 /*
@@ -181,9 +162,9 @@ extern object symbols;
  finally some external declarations with prototypes
  */
 
-extern void initMemoryManager( void );
-extern void imageWrite( FILE*);
-extern void imageRead( FILE*);
+void initMemoryManager( void );
+void imageWrite( FILE*);
+void imageRead( FILE*);
 extern boolean debugging;
 
 void setFreeLists();

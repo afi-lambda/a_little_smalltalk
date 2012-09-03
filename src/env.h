@@ -5,7 +5,7 @@
  =============== rules for various systems ====================
 */
 
-#ifndef ENv_H
+#ifndef ENV_H
 #define	ENV_H
 
 #include <stdlib.h>

@@ -129,7 +129,6 @@ boolean execute(object aProcess, int maxsteps) {
 	int i, j;
 	register int low;
 	int high;
-	register object incrobj; /* speed up increments and decrements */
 	byte *bp;
 
 	/* unpack the instance variables from the process */
