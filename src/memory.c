@@ -240,10 +240,9 @@ object allocByte(int size) {
 
 object allocStr(register const char *str) {
 	register object newSym;
-
-	newSym = allocByte(1 + strlen(str));
-	 strcpy(charPtr(newSym), str);
-	return (newSym);
+        newSym = allocByte(1 + strlen(str));
+        strcpy(charPtr(newSym), str);
+        return (newSym);
 }
 
 # ifdef incr
@@ -418,3 +417,30 @@ int objectCount() {
 			j++;
 	return j;
 }
+
+//# define intValue(x) ( (intobj = x)<0 ? intobj : (intobj>>1) )
+int intValue(object intobj)
+{
+    if (intobj < 0)
+        return intobj;
+    else
+        return (intobj>>1);
+}
+
+//# define newInteger(x) ( (intobj = x)<0 ? intobj : (intobj<<1)+1 )
+object newInteger(int intobj)
+{
+    if (intobj<0)
+        return intobj;
+    else
+        return (intobj<<1)+1;
+}
+
+//# define isInteger(x) ((x) & 0x8001)
+boolean isInteger(object intobj)
+{
+    return intobj & 0x8001;
+}
+
+
+

@@ -20,10 +20,10 @@
 #include "interp.h"
 #include "tty.h"
 #include "news.h"
+#include "primitive.h"
 
 object trueobj, falseobj;
 boolean watching = 0;
-extern object primitive( INT X OBJP );
 
 /*
  the following variables are local to this module

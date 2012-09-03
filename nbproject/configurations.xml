@@ -19,6 +19,7 @@
         <in>parser.c</in>
         <in>parser.h</in>
         <in>primitive.c</in>
+        <in>primitive.h</in>
         <in>st.c</in>
         <in>st.h</in>
         <in>tty.c</in>

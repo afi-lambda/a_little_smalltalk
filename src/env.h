@@ -5,12 +5,13 @@
  =============== rules for various systems ====================
 */
 
+#ifndef ENv_H
+#define	ENV_H
+
 #include <stdlib.h>
 #include <string.h>
 
 typedef unsigned char byte;
-
-#define byteToInt(b) (b)
 
 /* this is a bit sloppy - but it works */
 #define longCanBeInt(l) ((l >= -16383) && (l <= 16383))
@@ -28,13 +29,4 @@ typedef unsigned char byte;
 /* define the datatype boolean */
 typedef int boolean;
 
-# define X ,
-# define OBJ object
-# define OBJP object *
-# define INT int
-# define BOOL boolean
-# define STR char *
-# define FLOAT double
-# define NOARGS void
-# define FILEP FILE *
-# define FUNC ()
+#endif

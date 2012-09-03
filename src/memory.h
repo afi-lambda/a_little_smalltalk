@@ -91,9 +91,9 @@ object allocStr(register const char *str);
  */
 
 extern object intobj;
-# define isInteger(x) ((x) & 0x8001)
-# define newInteger(x) ( (intobj = x)<0 ? intobj : (intobj<<1)+1 )
-# define intValue(x) ( (intobj = x)<0 ? intobj : (intobj>>1) )
+boolean isInteger(object intobj);
+object newInteger(int intobj);
+int intValue(object intobj);
 
 /*
  there are four routines used to access fields within an object.
@@ -107,28 +107,28 @@ extern object intobj;
 # define byteAt(x, i) ((int) ((bytePtr(x)[i-1])))
 
 # ifndef basicAt
-extern object basicAt(OBJ X INT);
+extern object basicAt(object, int);
 # endif
 
 # define simpleAtPut(x,i,y) (sysMemPtr(x)[i-1] = y)
 # ifndef simpleAtPut
-extern void simpleAtPut(OBJ X INT X OBJ);
+extern void simpleAtPut(object, int, object);
 # endif
 
 # define basicAtPut(x,i,y) incr(simpleAtPut(x, i, y))
 # ifndef basicAtPut
-extern void basicAtPut(OBJ X INT X OBJ);
+extern void basicAtPut(object, int, object);
 # endif
 # define fieldAtPut(x,i,y) f_i=i; decr(basicAt(x,f_i)); basicAtPut(x,f_i,y)
 # ifdef fieldAtPut
 extern int f_i;
 #endif
 # ifndef fieldAtPut
-extern void fieldAtPut(OBJ X INT X OBJ);
+extern void fieldAtPut(object, int, object);
 # endif
 
 # ifndef byteAt
-extern int byteAt(OBJ X INT);
+extern int byteAt(object, int);
 # endif
 # ifndef byteAtPut
 extern void byteAtPut(object z, int i, int x);
@@ -145,7 +145,9 @@ extern void byteAtPut(object z, int i, int x);
 
 # define sysMemPtr(x) objectTable[x>>1].memory
 extern object sysobj;
-# define memoryPtr(x) (isInteger(sysobj = x)?(object *) 0:sysMemPtr(sysobj))
+
+//I'm not sure it was a good idea to replace (object*)0 to sysMemPtr(sysobj)
+# define memoryPtr(x) (isInteger(sysobj = x)?sysMemPtr(sysobj):sysMemPtr(sysobj))
 # define bytePtr(x) ((byte *) memoryPtr(x))
 # define charPtr(x) ((char *) memoryPtr(x))
 
@@ -167,7 +169,7 @@ extern object sysobj;
  algorithm.
  */
 # ifndef mBlockAlloc
-extern object *mBlockAlloc( INT);
+extern object *mBlockAlloc(int);
 # endif
 
 /*
@@ -179,9 +181,9 @@ extern object symbols;
  finally some external declarations with prototypes
  */
 
-extern void initMemoryManager( NOARGS);
-extern void imageWrite( FILEP);
-extern void imageRead( FILEP);
+extern void initMemoryManager( void );
+extern void imageWrite( FILE*);
+extern void imageRead( FILE*);
 extern boolean debugging;
 
 void setFreeLists();

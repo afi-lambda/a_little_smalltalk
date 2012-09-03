@@ -13,5 +13,5 @@ image: lsti
 
 clean:
 	@-rm -f *.o 2>/dev/null
-	@-rm lsti systemImage 2>/dev/null
+	@-rm lsti 2>/dev/null
 	

@@ -24,7 +24,7 @@ typedef enum tokensyms {
 	inputend
 } tokentype;
 
-extern tokentype nextToken( NOARGS);
+extern tokentype nextToken( void );
 
 extern tokentype token; /* token variety */
 extern char tokenString[]; /* text of current token */

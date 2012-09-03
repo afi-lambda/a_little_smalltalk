@@ -42,8 +42,8 @@ extern int linkPointer;
 
 extern double frexp(), ldexp();
 extern long time();
-extern object ioPrimitive(INT X OBJP);
-extern object sysPrimitive(INT X OBJP);
+extern object ioPrimitive( int , object*);
+extern object sysPrimitive(int , object*);
 
 static jmp_buf jb;
 void brkfun(int sig) {

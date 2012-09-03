@@ -6,6 +6,9 @@
  names and sizes of internally object used internally in the system
  */
 
+#ifndef NAMES_H
+#define	NAMES_H
+
 # define classSize 5
 # define nameInClass 1
 # define sizeInClass 2
@@ -60,3 +63,5 @@ extern object unSyms[12];
 extern object binSyms[30];
 
 # define globalSymbol(s) nameTableLookup(symbols, s)
+
+#endif
