@@ -57,7 +57,7 @@ static void readClassDeclaration() {
 	object instanceVariables[15];
 
 	if (nextToken() != nameconst)
-		sysError("bad file format", "no name in declaration");
+		TTY::sysError("bad file format", "no name in declaration");
 	classObj = findClass(tokenString);
 	size = 0;
 	if (nextToken() == nameconst) { /* read superclass name */
@@ -92,7 +92,7 @@ static void readMethods(FILE *fd, boolean printit)
 	char *cp, *eoftest, lineBuffer[LINEBUFFERSIZE];
 
 	if (nextToken() != nameconst)
-		sysError("missing name", "following Method keyword");
+		TTY::sysError("missing name", "following Method keyword");
 	classObj = findClass(tokenString);
 	setInstanceVariables(classObj);
 	if (printit)
@@ -117,7 +117,7 @@ static void readMethods(FILE *fd, boolean printit)
 			strcat(textBuffer, lineBuffer);
 		}
 		if (eoftest == NULL) {
-			sysError("unexpected end of file", "while reading method");
+			TTY::sysError("unexpected end of file", "while reading method");
 			break;
 		}
 
@@ -127,13 +127,13 @@ static void readMethods(FILE *fd, boolean printit)
 			selector = basicAt(theMethod, messageInMethod);
 			basicAtPut(theMethod, methodClassInMethod, classObj);
 			if (printit)
-				dspMethod(cp, charPtr(selector));
+				TTY::dspMethod(cp, charPtr(selector));
 			nameTableInsert(methTable, (int) selector, selector, theMethod);
 		} else {
 			/* get rid of unwanted method */
 			incr(theMethod);
 			decr(theMethod);
-			givepause();
+			TTY::givepause();
 		}
 
 	} while (lineBuffer[0] != ']');
@@ -155,6 +155,6 @@ void fileIn(FILE *fd, boolean printit)
 		else if ((token == nameconst) && streq(tokenString,"Methods"))
 			readMethods(fd, printit);
 		else
-			sysError("unrecognized line", textBuffer);
+			TTY::sysError("unrecognized line", textBuffer);
 	}
 }

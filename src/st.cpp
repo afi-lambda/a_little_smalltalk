@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 		fp = fopen(p, "rb");
 
 		if (fp == NULL) {
-			sysError("cannot open image", p);
+			TTY::sysError("cannot open image", p);
 			exit(1);
 		}
 		imageRead(fp);
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 
 		firstProcess = globalSymbol("systemProcess");
 		if (firstProcess == nilobj) {
-			sysError("no initial process", "in image");
+			TTY::sysError("no initial process", "in image");
 			exit(1);
 			return 1;
 		}

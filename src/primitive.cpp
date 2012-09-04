@@ -43,7 +43,6 @@ extern int linkPointer;
 extern double frexp(), ldexp();
 extern long time();
 object ioPrimitive( int , object*);
-extern object sysPrimitive(int , object*);
 
 static jmp_buf jb;
 void brkfun(int sig) {
@@ -92,7 +91,7 @@ static object zeroaryPrims(int number)
 		exit(0);
 
 	default: /* unknown primitive */
-		sysError("unknown primitive", "zeroargPrims");
+		TTY::sysError("unknown primitive", "zeroargPrims");
 		break;
 	}
 	return (returnedObject);
@@ -171,7 +170,7 @@ static int unaryPrims(int number, object firstarg)
 		break;
 
 	default: /* unknown primitive */
-		sysError("unknown primitive", "unaryPrims");
+		TTY::sysError("unknown primitive", "unaryPrims");
 		break;
 	}
 	return (returnedObject);
@@ -211,13 +210,13 @@ static int binaryPrims(int number, object firstarg, object secondarg)
 
 	case 5: /* basicAt: */
 		if (!isInteger(secondarg))
-			sysError("non integer index", "basicAt:");
+			TTY::sysError("non integer index", "basicAt:");
 		returnedObject = basicAt(firstarg, intValue(secondarg));
 		break;
 
 	case 6: /* byteAt: */
 		if (!isInteger(secondarg))
-			sysError("non integer index", "byteAt:");
+			TTY::sysError("non integer index", "byteAt:");
 		i = byteAt(firstarg, intValue(secondarg));
 		if (i < 0)
 			i += 256;
@@ -248,7 +247,7 @@ static int binaryPrims(int number, object firstarg, object secondarg)
 		break;
 
 	default: /* unknown primitive */
-		sysError("unknown primitive", "binaryPrims");
+		TTY::sysError("unknown primitive", "binaryPrims");
 		break;
 
 	}
@@ -265,7 +264,7 @@ static int trinaryPrims(int number, object firstarg, object secondarg, object th
 	switch (number) {
 	case 1: /* basicAt:Put: */
 		if (!isInteger(secondarg))
-			sysError("non integer index", "basicAtPut");
+			TTY::sysError("non integer index", "basicAtPut");
 		fprintf(stderr, "IN BASICATPUT %d %d %d\n", firstarg,
 				intValue(secondarg), thirdarg);
 		fieldAtPut(firstarg, intValue(secondarg), thirdarg)
@@ -274,16 +273,16 @@ static int trinaryPrims(int number, object firstarg, object secondarg, object th
 
 	case 2: /* basicAt:Put: for bytes */
 		if (!isInteger(secondarg))
-			sysError("non integer index", "byteAtPut");
+			TTY::sysError("non integer index", "byteAtPut");
 		if (!isInteger(thirdarg))
-			sysError("assigning non int", "to byte");
+			TTY::sysError("assigning non int", "to byte");
 		byteAtPut(firstarg, intValue(secondarg), intValue(thirdarg));
 		break;
 
 	case 3: /* string copyFrom:to: */
 		bp = charPtr(firstarg);
 		if ((!isInteger(secondarg)) || (!isInteger(thirdarg)))
-			sysError("non integer index", "copyFromTo");
+			TTY::sysError("non integer index", "copyFromTo");
 		i = intValue(secondarg);
 		j = intValue(thirdarg);
 		tp = buffer;
@@ -304,7 +303,7 @@ static int trinaryPrims(int number, object firstarg, object secondarg, object th
 		break;
 
 	default: /* unknown primitive */
-		sysError("unknown primitive", "trinaryPrims");
+		TTY::sysError("unknown primitive", "trinaryPrims");
 		break;
 	}
 	return (returnedObject);
@@ -340,7 +339,7 @@ static int intUnary(int number, int firstarg)
 		break;
 
 	default:
-		sysError("intUnary primitive", "not implemented yet");
+		TTY::sysError("intUnary primitive", "not implemented yet");
 	}
 	return (returnedObject);
 }
@@ -468,11 +467,11 @@ static int strUnary(int number, char *firstargument)
 		break;
 
 	case 9:
-		sysError("fatal error", firstargument);
+		TTY::sysError("fatal error", firstargument);
 		break;
 
 	default:
-		sysError("unknown primitive", "strUnary");
+		TTY::sysError("unknown primitive", "strUnary");
 		break;
 	}
 
@@ -532,7 +531,7 @@ static int floatUnary(int number, double firstarg)
 		break;
 
 	default:
-		sysError("unknown primitive", "floatUnary");
+		TTY::sysError("unknown primitive", "floatUnary");
 		break;
 	}
 
@@ -577,7 +576,7 @@ static object floatBinary(int number, double first, double second)
 		first /= second;
 		break;
 	default:
-		sysError("unknown primitive", "floatBinary");
+		TTY::sysError("unknown primitive", "floatBinary");
 		break;
 	}
 
@@ -601,7 +600,7 @@ object primitive(register int primitiveNumber, object *arguments)
 
 	if (primitiveNumber >= 150) {
 		/* system dependent primitives, handled in separate module */
-		returnedObject = sysPrimitive(primitiveNumber, arguments);
+		returnedObject = TTY::sysPrimitive(primitiveNumber, arguments);
 	} else {
 		switch (primitiveGroup) {
 		case 0:
@@ -658,7 +657,7 @@ object primitive(register int primitiveNumber, object *arguments)
 			break;
 
 		default:
-			sysError("unknown primitive number", "doPrimitive");
+			TTY::sysError("unknown primitive number", "doPrimitive");
 			break;
 		}
 	}

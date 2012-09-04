@@ -33,7 +33,7 @@ static int fr(FILE *fp, char *p, int s) {
 
 	r = fread(p, s, 1, fp);
 	if (r && (r != 1))
-		sysError("imageRead count error", "");
+		TTY::sysError("imageRead count error", "");
 	return r;
 }
 
@@ -48,12 +48,12 @@ void imageRead(FILE *fp) {
 		i = dummyObject.di;
 
 		if ((i < 0) || (i > ObjectTableMax))
-			sysError("reading index out of range", "");
+			TTY::sysError("reading index out of range", "");
 		objectTable[i].STclass = dummyObject.cl;
 		if ((objectTable[i].STclass < 0) || ((objectTable[i].STclass >> 1)
 				> ObjectTableMax)) {
 			fprintf(stderr, "index %d\n", dummyObject.cl);
-			sysError("class out of range", "imageRead");
+			TTY::sysError("class out of range", "imageRead");
 		}
 		objectTable[i].size = size = dummyObject.ds;
 		if (size < 0)
@@ -79,7 +79,7 @@ void imageRead(FILE *fp) {
 
 static void fw(FILE *fp, char *p, int s) {
 	if (fwrite(p, s, 1, fp) != 1) {
-		sysError("imageWrite size error", "");
+		TTY::sysError("imageWrite size error", "");
 	}
 }
 
@@ -151,7 +151,7 @@ object ioPrimitive(int number, object *arguments) {
 		break;
 
 	case 4: /* get character */
-		sysError("file operation not implemented yet", "");
+		TTY::sysError("file operation not implemented yet", "");
 
 	case 5: /* get string */
 		if (!fp[i])
@@ -193,7 +193,7 @@ object ioPrimitive(int number, object *arguments) {
 		break;
 
 	default:
-		sysError("unknown primitive", "filePrimitive");
+		TTY::sysError("unknown primitive", "filePrimitive");
 	}
 
 	return (returnedObject);

@@ -19,16 +19,18 @@
 
 extern boolean parseok;
 
+class TTY {
+public:
 /* report a fatal system error */
-void sysError(const char *s1, const char *s2);
+static void sysError(const char *s1, const char *s2);
 
 /* report a nonfatal system error */
-void sysWarn(const char *s1, const char *s2);
-void compilWarn(const char *selector, const char *str1, const char *str2);
-void compilError(const char *selector, const char *str1, const char *str2);
-void dspMethod(const char *cp, const char *mp);
-void givepause();
-object sysPrimitive(int number, object *arguments);
-
+static void sysWarn(const char *s1, const char *s2);
+static void compilWarn(const char *selector, const char *str1, const char *str2);
+static void compilError(const char *selector, const char *str1, const char *str2);
+static void dspMethod(const char *cp, const char *mp);
+static void givepause();
+static object sysPrimitive(int number, object *arguments);
+};
 #endif	/* TTY_H */
 

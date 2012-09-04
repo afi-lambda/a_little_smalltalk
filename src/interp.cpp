@@ -239,7 +239,7 @@ boolean execute(object aProcess, int maxsteps) {
 				break;
 
 			default:
-				sysError("unimplemented constant", "pushConstant");
+				TTY::sysError("unimplemented constant", "pushConstant");
 			}
 			break;
 
@@ -296,7 +296,7 @@ boolean execute(object aProcess, int maxsteps) {
 					ipush(argarray);
 					/* try again - if fail really give up */
 					if (!findMethod(&methodClass)) {
-						sysWarn("can't find", "error recovery method");
+						TTY::sysWarn("can't find", "error recovery method");
 						/* just quit */
 						return false;
 					}
@@ -321,7 +321,7 @@ boolean execute(object aProcess, int maxsteps) {
 				/* try again - if fail really give up */
 				methodClass = classField(method);
 				if (!findMethod(&methodClass)) {
-					sysWarn("can't find", "watch method");
+					TTY::sysWarn("can't find", "watch method");
 					/* just quit */
 					return false;
 				}
@@ -573,13 +573,13 @@ boolean execute(object aProcess, int maxsteps) {
 				goto doFindMessage;
 
 			default:
-				sysError("invalid doSpecial", "");
+				TTY::sysError("invalid doSpecial", "");
 				break;
 			}
 			break;
 
 		default:
-			sysError("invalid bytecode", "");
+			TTY::sysError("invalid bytecode", "");
 			break;
 		}
 	}

@@ -4,27 +4,27 @@
     <df name="a_little_smalltalk" root=".">
       <df name="src">
         <in>env.h</in>
-        <in>filein.c</in>
+        <in>filein.cpp</in>
         <in>filein.h</in>
-        <in>interp.c</in>
+        <in>interp.cpp</in>
         <in>interp.h</in>
-        <in>lex.c</in>
+        <in>lex.cpp</in>
         <in>lex.h</in>
-        <in>memory.c</in>
+        <in>memory.cpp</in>
         <in>memory.h</in>
-        <in>names.c</in>
+        <in>names.cpp</in>
         <in>names.h</in>
-        <in>news.c</in>
+        <in>news.cpp</in>
         <in>news.h</in>
-        <in>parser.c</in>
+        <in>parser.cpp</in>
         <in>parser.h</in>
-        <in>primitive.c</in>
+        <in>primitive.cpp</in>
         <in>primitive.h</in>
-        <in>st.c</in>
+        <in>st.cpp</in>
         <in>st.h</in>
-        <in>tty.c</in>
+        <in>tty.cpp</in>
         <in>tty.h</in>
-        <in>unixio.c</in>
+        <in>unixio.cpp</in>
       </df>
       <df name="stlib">
       </df>
@@ -57,15 +57,59 @@
           <buildCommand>${MAKE} -f Makefile</buildCommand>
           <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
           <executablePath></executablePath>
-          <cTool>
+          <ccTool>
             <incDir>
               <pElem>/usr/include/c++/4.6/i686-linux-gnu</pElem>
               <pElem>/usr/include/c++/4.6</pElem>
               <pElem>.</pElem>
             </incDir>
-          </cTool>
+          </ccTool>
         </makeTool>
       </makefileType>
+      <item path="src/filein.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool>
+        </ccTool>
+      </item>
+      <item path="src/interp.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool>
+        </ccTool>
+      </item>
+      <item path="src/lex.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool>
+        </ccTool>
+      </item>
+      <item path="src/memory.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool>
+        </ccTool>
+      </item>
+      <item path="src/names.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool>
+        </ccTool>
+      </item>
+      <item path="src/news.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool>
+        </ccTool>
+      </item>
+      <item path="src/parser.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool>
+        </ccTool>
+      </item>
+      <item path="src/primitive.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool>
+        </ccTool>
+      </item>
+      <item path="src/st.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool>
+        </ccTool>
+      </item>
+      <item path="src/tty.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool>
+        </ccTool>
+      </item>
+      <item path="src/unixio.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool>
+        </ccTool>
+      </item>
     </conf>
   </confs>
 </configurationDescriptor>
