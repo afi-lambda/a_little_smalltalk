@@ -9,19 +9,20 @@
 #ifndef _LEX_H
 #define _LEX_H
 
-typedef enum tokensyms {
-	nothing,
-	nameconst,
-	namecolon,
-	intconst,
-	floatconst,
-	charconst,
-	symconst,
-	arraybegin,
-	strconst,
-	binary,
-	closing,
-	inputend
+typedef enum tokensyms
+{
+    nothing,
+    nameconst,
+    namecolon,
+    intconst,
+    floatconst,
+    charconst,
+    symconst,
+    arraybegin,
+    strconst,
+    binary,
+    closing,
+    inputend
 } tokentype;
 
 extern tokentype nextToken( void );

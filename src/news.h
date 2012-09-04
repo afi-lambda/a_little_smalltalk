@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   news.h
  * Author: oni
  *

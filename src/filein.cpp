@@ -37,49 +37,55 @@ static char textBuffer[TextBufferSize];
  */
 static object findClass(char *name)
 {
-	object newobj;
+    object newobj;
 
-	newobj = globalSymbol(name);
-	if (newobj == nilobj)
-		newobj = newClass(name);
-	if (basicAt(newobj, sizeInClass) == nilobj) {
-		basicAtPut(newobj, sizeInClass, newInteger(0));
-	}
-	return newobj;
+    newobj = globalSymbol(name);
+    if (newobj == nilobj)
+        newobj = newClass(name);
+    if (basicAt(newobj, sizeInClass) == nilobj)
+    {
+        basicAtPut(newobj, sizeInClass, newInteger(0));
+    }
+    return newobj;
 }
 
 /*
  readDeclaration reads a declaration of a class
  */
-static void readClassDeclaration() {
-	object classObj, super, vars;
-	int i, size, instanceTop;
-	object instanceVariables[15];
+static void readClassDeclaration()
+{
+    object classObj, super, vars;
+    int i, size, instanceTop;
+    object instanceVariables[15];
 
-	if (nextToken() != nameconst)
-		TTY::sysError("bad file format", "no name in declaration");
-	classObj = findClass(tokenString);
-	size = 0;
-	if (nextToken() == nameconst) { /* read superclass name */
-		super = findClass(tokenString);
-		basicAtPut(classObj, superClassInClass, super);
-		size = intValue(basicAt(super, sizeInClass));
-		nextToken();
-	}
-	if (token == nameconst) { /* read instance var names */
-		instanceTop = 0;
-		while (token == nameconst) {
-			instanceVariables[instanceTop++] = newSymbol(tokenString);
-			size++;
-			nextToken();
-		}
-		vars = newArray(instanceTop);
-		for (i = 0; i < instanceTop; i++) {
-			basicAtPut(vars, i+1, instanceVariables[i]);
-		}
-		basicAtPut(classObj, variablesInClass, vars);
-	}
-	basicAtPut(classObj, sizeInClass, newInteger(size));
+    if (nextToken() != nameconst)
+        TTY::sysError("bad file format", "no name in declaration");
+    classObj = findClass(tokenString);
+    size = 0;
+    if (nextToken() == nameconst)   /* read superclass name */
+    {
+        super = findClass(tokenString);
+        basicAtPut(classObj, superClassInClass, super);
+        size = intValue(basicAt(super, sizeInClass));
+        nextToken();
+    }
+    if (token == nameconst)   /* read instance var names */
+    {
+        instanceTop = 0;
+        while (token == nameconst)
+        {
+            instanceVariables[instanceTop++] = newSymbol(tokenString);
+            size++;
+            nextToken();
+        }
+        vars = newArray(instanceTop);
+        for (i = 0; i < instanceTop; i++)
+        {
+            basicAtPut(vars, i+1, instanceVariables[i]);
+        }
+        basicAtPut(classObj, variablesInClass, vars);
+    }
+    basicAtPut(classObj, sizeInClass, newInteger(size));
 }
 
 /*
@@ -87,56 +93,64 @@ static void readClassDeclaration() {
  */
 static void readMethods(FILE *fd, boolean printit)
 {
-	object classObj, methTable, theMethod, selector;
+    object classObj, methTable, theMethod, selector;
 # define LINEBUFFERSIZE 512
-	char *cp, *eoftest, lineBuffer[LINEBUFFERSIZE];
+    char *cp, *eoftest, lineBuffer[LINEBUFFERSIZE];
 
-	if (nextToken() != nameconst)
-		TTY::sysError("missing name", "following Method keyword");
-	classObj = findClass(tokenString);
-	setInstanceVariables(classObj);
-	if (printit)
-		cp = charPtr(basicAt(classObj, nameInClass));
+    if (nextToken() != nameconst)
+        TTY::sysError("missing name", "following Method keyword");
+    classObj = findClass(tokenString);
+    setInstanceVariables(classObj);
+    if (printit)
+        cp = charPtr(basicAt(classObj, nameInClass));
 
-	/* now find or create a method table */
-	methTable = basicAt(classObj, methodsInClass);
-	if (methTable == nilobj) { /* must make */
-		methTable = newDictionary(MethodTableSize);
-		basicAtPut(classObj, methodsInClass, methTable);
-	}
+    /* now find or create a method table */
+    methTable = basicAt(classObj, methodsInClass);
+    if (methTable == nilobj)   /* must make */
+    {
+        methTable = newDictionary(MethodTableSize);
+        basicAtPut(classObj, methodsInClass, methTable);
+    }
 
-	/* now go read the methods */
-	do {
-		if (lineBuffer[0] == '|') /* get any left over text */
-			strcpy(textBuffer, &lineBuffer[1]);
-		else
-			textBuffer[0] = '\0';
-		while ((eoftest = fgets(lineBuffer, LINEBUFFERSIZE, fd)) != NULL) {
-			if ((lineBuffer[0] == '|') || (lineBuffer[0] == ']'))
-				break;
-			strcat(textBuffer, lineBuffer);
-		}
-		if (eoftest == NULL) {
-			TTY::sysError("unexpected end of file", "while reading method");
-			break;
-		}
+    /* now go read the methods */
+    do
+    {
+        if (lineBuffer[0] == '|') /* get any left over text */
+            strcpy(textBuffer, &lineBuffer[1]);
+        else
+            textBuffer[0] = '\0';
+        while ((eoftest = fgets(lineBuffer, LINEBUFFERSIZE, fd)) != NULL)
+        {
+            if ((lineBuffer[0] == '|') || (lineBuffer[0] == ']'))
+                break;
+            strcat(textBuffer, lineBuffer);
+        }
+        if (eoftest == NULL)
+        {
+            TTY::sysError("unexpected end of file", "while reading method");
+            break;
+        }
 
-		/* now we have a method */
-		theMethod = newMethod();
-		if (parse(theMethod, textBuffer, savetext)) {
-			selector = basicAt(theMethod, messageInMethod);
-			basicAtPut(theMethod, methodClassInMethod, classObj);
-			if (printit)
-				TTY::dspMethod(cp, charPtr(selector));
-			nameTableInsert(methTable, (int) selector, selector, theMethod);
-		} else {
-			/* get rid of unwanted method */
-			incr(theMethod);
-			decr(theMethod);
-			TTY::givepause();
-		}
+        /* now we have a method */
+        theMethod = newMethod();
+        if (parse(theMethod, textBuffer, savetext))
+        {
+            selector = basicAt(theMethod, messageInMethod);
+            basicAtPut(theMethod, methodClassInMethod, classObj);
+            if (printit)
+                TTY::dspMethod(cp, charPtr(selector));
+            nameTableInsert(methTable, (int) selector, selector, theMethod);
+        }
+        else
+        {
+            /* get rid of unwanted method */
+            incr(theMethod);
+            decr(theMethod);
+            TTY::givepause();
+        }
 
-	} while (lineBuffer[0] != ']');
+    }
+    while (lineBuffer[0] != ']');
 }
 
 /*
@@ -144,17 +158,18 @@ static void readMethods(FILE *fd, boolean printit)
  */
 void fileIn(FILE *fd, boolean printit)
 {
-	while (fgets(textBuffer, TextBufferSize, fd) != NULL) {
-		lexinit(textBuffer);
-		if (token == inputend)
-			; /* do nothing, get next line */
-		else if ((token == binary) && streq(tokenString, "\""))
-			; /* do nothing, its a comment */
-		else if ((token == nameconst) && streq(tokenString, "Class"))
-			readClassDeclaration();
-		else if ((token == nameconst) && streq(tokenString,"Methods"))
-			readMethods(fd, printit);
-		else
-			TTY::sysError("unrecognized line", textBuffer);
-	}
+    while (fgets(textBuffer, TextBufferSize, fd) != NULL)
+    {
+        lexinit(textBuffer);
+        if (token == inputend)
+            ; /* do nothing, get next line */
+        else if ((token == binary) && streq(tokenString, "\""))
+            ; /* do nothing, its a comment */
+        else if ((token == nameconst) && streq(tokenString, "Class"))
+            readClassDeclaration();
+        else if ((token == nameconst) && streq(tokenString,"Methods"))
+            readMethods(fd, printit);
+        else
+            TTY::sysError("unrecognized line", textBuffer);
+    }
 }

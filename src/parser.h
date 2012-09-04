@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   parser.h
  * Author: oni
  *

@@ -29,11 +29,12 @@ typedef short object;
  replacement is possible as long as the interface remains consistent
  */
 
-struct objectStruct {
-	object STclass;
-	short referenceCount;
-	short size;
-	object *memory;
+struct objectStruct
+{
+    object STclass;
+    short referenceCount;
+    short size;
+    object *memory;
 };
 # define ObjectTableMax 6500
 

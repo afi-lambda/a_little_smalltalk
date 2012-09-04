@@ -19,54 +19,56 @@ extern boolean parseok;
 /* report a fatal system error */
 void TTY::sysError(const char *s1, const char *s2)
 {
-	 fprintf(stderr, "%s\n%s\n", s1, s2);
-	 abort();
+    fprintf(stderr, "%s\n%s\n", s1, s2);
+    abort();
 }
 
 /* report a nonfatal system error */
 void TTY::sysWarn(const char *s1, const char *s2)
 {
-	 fprintf(stderr, "%s\n%s\n", s1, s2);
+    fprintf(stderr, "%s\n%s\n", s1, s2);
 }
 
 void TTY::compilWarn(const char *selector, const char *str1, const char *str2)
 {
-	 fprintf(stderr, "compiler warning: Method %s : %s %s\n", selector,
-			str1, str2);
+    fprintf(stderr, "compiler warning: Method %s : %s %s\n", selector,
+            str1, str2);
 }
 
 void TTY::compilError(const char *selector, const char *str1, const char *str2)
 {
-	 fprintf(stderr, "compiler error: Method %s : %s %s\n", selector,
-			str1, str2);
-	parseok = false;
+    fprintf(stderr, "compiler error: Method %s : %s %s\n", selector,
+            str1, str2);
+    parseok = false;
 }
 
 void TTY::dspMethod(const char *cp, const char *mp)
 {
-	/* fprintf(stderr,"%s %s\n", cp, mp);*/
+    /* fprintf(stderr,"%s %s\n", cp, mp);*/
 }
 
-void TTY::givepause() {
-	char buffer[80];
+void TTY::givepause()
+{
+    char buffer[80];
 
-	 fprintf(stderr, "push return to continue\n");
-	 fgets(buffer, 79, stdin);
+    fprintf(stderr, "push return to continue\n");
+    fgets(buffer, 79, stdin);
 }
 
 object TTY::sysPrimitive(int number, object *arguments)
 {
-	object returnedObject;
+    object returnedObject;
 
-	/* someday there will be more here */
-	switch (number - 150) {
-	case 0: /* do a system() call */
-		returnedObject = newInteger(system(
-						charPtr(arguments[0])));
-		break;
+    /* someday there will be more here */
+    switch (number - 150)
+    {
+    case 0: /* do a system() call */
+        returnedObject = newInteger(system(
+                                        charPtr(arguments[0])));
+        break;
 
-	default:
-		sysError("unknown primitive", "sysPrimitive");
-	}
-	return (returnedObject);
+    default:
+        sysError("unknown primitive", "sysPrimitive");
+    }
+    return (returnedObject);
 }

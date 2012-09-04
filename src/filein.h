@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   filein.h
  * Author: oni
  *

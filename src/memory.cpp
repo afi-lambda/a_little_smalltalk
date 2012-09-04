@@ -75,59 +75,64 @@ static int currentMemoryPosition; /* last used position in above */
 # endif
 
 /* initialize the memory management module */
-void initMemoryManager() {
-	int i;
+void initMemoryManager()
+{
+    int i;
 
 # ifdef obtalloc
-	objectTable = obtalloc(ObjectTableMax, sizeof(struct objectStruct));
-	if (! objectTable)
-	sysError("cannot allocate","object table");
+    objectTable = obtalloc(ObjectTableMax, sizeof(struct objectStruct));
+    if (! objectTable)
+        sysError("cannot allocate","object table");
 # endif
 
-	/* set all the free list pointers to zero */
-	for (i = 0; i < FREELISTMAX; i++)
-		objectFreeList[i] = nilobj;
+    /* set all the free list pointers to zero */
+    for (i = 0; i < FREELISTMAX; i++)
+        objectFreeList[i] = nilobj;
 
-	/* set all the reference counts to zero */
-	for (i = 0; i < ObjectTableMax; i++) {
-		objectTable[i].referenceCount = 0;
-		objectTable[i].size = 0;
-	}
+    /* set all the reference counts to zero */
+    for (i = 0; i < ObjectTableMax; i++)
+    {
+        objectTable[i].referenceCount = 0;
+        objectTable[i].size = 0;
+    }
 
-	/* make up the initial free lists */
-	setFreeLists();
+    /* make up the initial free lists */
+    setFreeLists();
 
 # ifndef mBlockAlloc
-	/* force an allocation on first object assignment */
-	currentMemoryPosition = MemoryBlockSize + 1;
+    /* force an allocation on first object assignment */
+    currentMemoryPosition = MemoryBlockSize + 1;
 # endif
 
-	/* object at location 0 is the nil object, so give it nonzero ref */
-	objectTable[0].referenceCount = 1;
-	objectTable[0].size = 0;
+    /* object at location 0 is the nil object, so give it nonzero ref */
+    objectTable[0].referenceCount = 1;
+    objectTable[0].size = 0;
 }
 
 /* setFreeLists - initialise the free lists */
-void setFreeLists() {
-	int i, size;
-	register int z;
-	register struct objectStruct *p;
+void setFreeLists()
+{
+    int i, size;
+    register int z;
+    register struct objectStruct *p;
 
-	objectFreeList[0] = nilobj;
+    objectFreeList[0] = nilobj;
 
-	for (z = ObjectTableMax - 1; z > 0; z--) {
-		if (objectTable[z].referenceCount == 0) {
-			/* Unreferenced, so do a sort of sysDecr: */
-			p = &objectTable[z];
-			size = p->size;
-			if (size < 0)
-				size = ((-size) + 1) / 2;
-			p->STclass = objectFreeList[size];
-			objectFreeList[size] = z;
-			for (i = size; i > 0;)
-				p->memory[--i] = nilobj;
-		}
-	}
+    for (z = ObjectTableMax - 1; z > 0; z--)
+    {
+        if (objectTable[z].referenceCount == 0)
+        {
+            /* Unreferenced, so do a sort of sysDecr: */
+            p = &objectTable[z];
+            size = p->size;
+            if (size < 0)
+                size = ((-size) + 1) / 2;
+            p->STclass = objectFreeList[size];
+            objectFreeList[size] = z;
+            for (i = size; i > 0;)
+                p->memory[--i] = nilobj;
+        }
+    }
 }
 
 /*
@@ -136,164 +141,182 @@ void setFreeLists() {
  */
 # ifndef mBlockAlloc
 
-object *mBlockAlloc(int memorySize) {
-	object *objptr;
+object *mBlockAlloc(int memorySize)
+{
+    object *objptr;
 
-	if (currentMemoryPosition + memorySize >= MemoryBlockSize) {
+    if (currentMemoryPosition + memorySize >= MemoryBlockSize)
+    {
 
-		/* we toss away space here.  Space-Frugal users may want to
-		 fix this by making a new object of size
-		 MemoryBlockSize - currentMemoryPositon - 1
-		 and putting it on the free list, but I think
-		 the savings is potentially small */
+        /* we toss away space here.  Space-Frugal users may want to
+         fix this by making a new object of size
+         MemoryBlockSize - currentMemoryPositon - 1
+         and putting it on the free list, but I think
+         the savings is potentially small */
 
-		memoryBlock = (object *) calloc((unsigned) MemoryBlockSize,
-				sizeof(object));
-		if (!memoryBlock)
-			TTY::sysError("out of memory", "malloc failed");
-		currentMemoryPosition = 0;
-	}
-	objptr = (object *) &memoryBlock[currentMemoryPosition];
-	currentMemoryPosition += memorySize;
-	return (objptr);
+        memoryBlock = (object *) calloc((unsigned) MemoryBlockSize,
+                                        sizeof(object));
+        if (!memoryBlock)
+            TTY::sysError("out of memory", "malloc failed");
+        currentMemoryPosition = 0;
+    }
+    objptr = (object *) &memoryBlock[currentMemoryPosition];
+    currentMemoryPosition += memorySize;
+    return (objptr);
 }
 # endif
 
 /* allocate a new memory object */
-object allocObject(int memorySize) {
-	int i;
-	register int position;
-	boolean done;
+object allocObject(int memorySize)
+{
+    int i;
+    register int position;
+    boolean done;
 
-	if (memorySize >= FREELISTMAX) {
-		fprintf(stderr, "size %d\n", memorySize);
-		TTY::sysError("allocation bigger than permitted", "allocObject");
-	}
+    if (memorySize >= FREELISTMAX)
+    {
+        fprintf(stderr, "size %d\n", memorySize);
+        TTY::sysError("allocation bigger than permitted", "allocObject");
+    }
 
-	/* first try the free lists, this is fastest */
-	if ((position = objectFreeList[memorySize]) != 0) {
-		objectFreeList[memorySize] = objectTable[position].STclass;
-	}
+    /* first try the free lists, this is fastest */
+    if ((position = objectFreeList[memorySize]) != 0)
+    {
+        objectFreeList[memorySize] = objectTable[position].STclass;
+    }
 
-	/* if not there, next try making a size zero object and
-	 making it bigger */
-	else if ((position = objectFreeList[0]) != 0) {
-		objectFreeList[0] = objectTable[position].STclass;
-		objectTable[position].size = memorySize;
-		objectTable[position].memory = mBlockAlloc(memorySize);
-	}
+    /* if not there, next try making a size zero object and
+     making it bigger */
+    else if ((position = objectFreeList[0]) != 0)
+    {
+        objectFreeList[0] = objectTable[position].STclass;
+        objectTable[position].size = memorySize;
+        objectTable[position].memory = mBlockAlloc(memorySize);
+    }
 
-	else { /* not found, must work a bit harder */
-		done = false;
+    else   /* not found, must work a bit harder */
+    {
+        done = false;
 
-		/* first try making a bigger object smaller */
-		for (i = memorySize + 1; i < FREELISTMAX; i++)
-			if ((position = objectFreeList[i]) != 0) {
-				objectFreeList[i] = objectTable[position].STclass;
-				/* just trim it a bit */
-				objectTable[position].size = memorySize;
-				done = true;
-				break;
-			}
+        /* first try making a bigger object smaller */
+        for (i = memorySize + 1; i < FREELISTMAX; i++)
+            if ((position = objectFreeList[i]) != 0)
+            {
+                objectFreeList[i] = objectTable[position].STclass;
+                /* just trim it a bit */
+                objectTable[position].size = memorySize;
+                done = true;
+                break;
+            }
 
-		/* next try making a smaller object bigger */
-		if (!done)
-			for (i = 1; i < memorySize; i++)
-				if ((position = objectFreeList[i]) != 0) {
-					objectFreeList[i] = objectTable[position].STclass;
-					objectTable[position].size = memorySize;
+        /* next try making a smaller object bigger */
+        if (!done)
+            for (i = 1; i < memorySize; i++)
+                if ((position = objectFreeList[i]) != 0)
+                {
+                    objectFreeList[i] = objectTable[position].STclass;
+                    objectTable[position].size = memorySize;
 # ifdef mBlockAlloc
-					free(objectTable[position].memory);
+                    free(objectTable[position].memory);
 # endif
-					objectTable[position].memory = mBlockAlloc(memorySize);
-					done = true;
-					break;
-				}
+                    objectTable[position].memory = mBlockAlloc(memorySize);
+                    done = true;
+                    break;
+                }
 
-		/* if we STILL don't have it then there is nothing */
-		/* more we can do */
-		if (!done)
-			TTY::sysError("out of objects", "alloc");
-	}
+        /* if we STILL don't have it then there is nothing */
+        /* more we can do */
+        if (!done)
+            TTY::sysError("out of objects", "alloc");
+    }
 
-	/* set class and type */
-	objectTable[position].referenceCount = 0;
-	objectTable[position].STclass = nilobj;
-	objectTable[position].size = memorySize;
-	return (position << 1);
+    /* set class and type */
+    objectTable[position].referenceCount = 0;
+    objectTable[position].STclass = nilobj;
+    objectTable[position].size = memorySize;
+    return (position << 1);
 }
 
-object allocByte(int size) {
-	object newObj;
+object allocByte(int size)
+{
+    object newObj;
 
-	newObj = allocObject((size + 1) / 2);
-	/* negative size fields indicate bit objects */
-	sizeField(newObj) = -size;
-	return newObj;
+    newObj = allocObject((size + 1) / 2);
+    /* negative size fields indicate bit objects */
+    sizeField(newObj) = -size;
+    return newObj;
 }
 
-object allocStr(register const char *str) {
-	register object newSym;
-        newSym = allocByte(1 + strlen(str));
-        strcpy(charPtr(newSym), str);
-        return (newSym);
+object allocStr(register const char *str)
+{
+    register object newSym;
+    newSym = allocByte(1 + strlen(str));
+    strcpy(charPtr(newSym), str);
+    return (newSym);
 }
 
 void incr(object z)
 {
-	if (z && ! isInteger(z)) {
-		objectTable[z>>1].referenceCount++;
-	}
+    if (z && ! isInteger(z))
+    {
+        objectTable[z>>1].referenceCount++;
+    }
 }
 
 void decr(object z)
 {
-	if (z && ! isInteger(z)) {
-		if (--objectTable[z>>1].referenceCount <= 0) {
-			sysDecr(z);
-		}
-	}
+    if (z && ! isInteger(z))
+    {
+        if (--objectTable[z>>1].referenceCount <= 0)
+        {
+            sysDecr(z);
+        }
+    }
 }
 
 /* do the real work in the decr procedure */
-void sysDecr(object z) {
-	register struct objectStruct *p;
-	register int i;
-	int size;
+void sysDecr(object z)
+{
+    register struct objectStruct *p;
+    register int i;
+    int size;
 
-	p = &objectTable[z >> 1];
-	if (p->referenceCount < 0) {
-		fprintf(stderr, "object %d\n", z);
-		TTY::sysError("negative reference count", "");
-	}
-	decr(p->STclass);
-	size = p->size;
-	if (size < 0)
-		size = ((-size) + 1) / 2;
-	p->STclass = objectFreeList[size];
-	objectFreeList[size] = z >> 1;
-	if (size > 0) {
-		if (p->size > 0)
-			for (i = size; i;)
-				decr(p->memory[--i]);
-		for (i = size; i > 0;)
-			p->memory[--i] = nilobj;
-	}
-	p->size = size;
+    p = &objectTable[z >> 1];
+    if (p->referenceCount < 0)
+    {
+        fprintf(stderr, "object %d\n", z);
+        TTY::sysError("negative reference count", "");
+    }
+    decr(p->STclass);
+    size = p->size;
+    if (size < 0)
+        size = ((-size) + 1) / 2;
+    p->STclass = objectFreeList[size];
+    objectFreeList[size] = z >> 1;
+    if (size > 0)
+    {
+        if (p->size > 0)
+            for (i = size; i;)
+                decr(p->memory[--i]);
+        for (i = size; i > 0;)
+            p->memory[--i] = nilobj;
+    }
+    p->size = size;
 }
 
 # ifndef basicAt
 object basicAt(object z, register int i)
 {
-	if (isInteger(z))
-	sysError("attempt to index","into integer");
-	else if ((i <= 0) || (i > sizeField(z))) {
-		 fprintf(stderr,"index %d size %d\n", i, (int) sizeField(z));
-		sysError("index out of range","in basicAt");
-	}
-	else
-	return(sysMemPtr(z)[i-1]);
-	return(0);
+    if (isInteger(z))
+        sysError("attempt to index","into integer");
+    else if ((i <= 0) || (i > sizeField(z)))
+    {
+        fprintf(stderr,"index %d size %d\n", i, (int) sizeField(z));
+        sysError("index out of range","in basicAt");
+    }
+    else
+        return(sysMemPtr(z)[i-1]);
+    return(0);
 }
 # endif
 
@@ -301,15 +324,17 @@ object basicAt(object z, register int i)
 
 void simpleAtPut(object z, int i, object v)
 {
-	if (isInteger(z))
-	sysError("assigning index to","integer value");
-	else if ((i <= 0) || (i > sizeField(z))) {
-		 fprintf(stderr,"index %d size %d\n", i, (int) sizeField(z));
-		sysError("index out of range","in basicAtPut");
-	}
-	else {
-		sysMemPtr(z)[i-1] = v;
-	}
+    if (isInteger(z))
+        sysError("assigning index to","integer value");
+    else if ((i <= 0) || (i > sizeField(z)))
+    {
+        fprintf(stderr,"index %d size %d\n", i, (int) sizeField(z));
+        sysError("index out of range","in basicAtPut");
+    }
+    else
+    {
+        sysMemPtr(z)[i-1] = v;
+    }
 }
 # endif
 
@@ -317,8 +342,8 @@ void simpleAtPut(object z, int i, object v)
 
 void basicAtPut(object z, register int i, object v)
 {
-	simpleAtPut(z, i, v);
-	incr(v);
+    simpleAtPut(z, i, v);
+    incr(v);
 }
 # endif
 
@@ -329,44 +354,52 @@ int f_i;
 # ifndef fieldAtPut
 void fieldAtPut(object z, register int i, object v)
 {
-	decr(basicAt(z, i)); basicAtPut(z, i, v);
+    decr(basicAt(z, i));
+    basicAtPut(z, i, v);
 }
 # endif
 
 # ifndef byteAt
 int byteAt(object z, register int i)
-{	byte *bp;
-	unsigned char t;
+{
+    byte *bp;
+    unsigned char t;
 
-	if (isInteger(z))
-	sysError("indexing integer","byteAt");
-	else if ((i <= 0) || (i > 2 * - sizeField(z))) {
-		fprintf(stderr,"index %d size %d\n", i, sizeField(z));
-		sysError("index out of range","byteAt");
-	}
-	else {
-		bp = bytePtr(z);
-		t = bp[i-1];
-		fprintf(stderr,"byte at %d returning %d\n", i, (int) t);
-		i = (int) t;
-	}
-	return(i);
+    if (isInteger(z))
+        sysError("indexing integer","byteAt");
+    else if ((i <= 0) || (i > 2 * - sizeField(z)))
+    {
+        fprintf(stderr,"index %d size %d\n", i, sizeField(z));
+        sysError("index out of range","byteAt");
+    }
+    else
+    {
+        bp = bytePtr(z);
+        t = bp[i-1];
+        fprintf(stderr,"byte at %d returning %d\n", i, (int) t);
+        i = (int) t;
+    }
+    return(i);
 }
 # endif
 
 # ifndef byteAtPut
-void byteAtPut(object z, int i, int x) {
-	byte *bp;
+void byteAtPut(object z, int i, int x)
+{
+    byte *bp;
 
-	if (isInteger(z))
-		TTY::sysError("indexing integer", "byteAtPut");
-	else if ((i <= 0) || (i > 2 * -sizeField(z))) {
-		fprintf(stderr, "index %d size %d\n", i, sizeField(z));
-		TTY::sysError("index out of range", "byteAtPut");
-	} else {
-		bp = bytePtr(z);
-		bp[i - 1] = x;
-	}
+    if (isInteger(z))
+        TTY::sysError("indexing integer", "byteAtPut");
+    else if ((i <= 0) || (i > 2 * -sizeField(z)))
+    {
+        fprintf(stderr, "index %d size %d\n", i, sizeField(z));
+        TTY::sysError("index out of range", "byteAtPut");
+    }
+    else
+    {
+        bp = bytePtr(z);
+        bp[i - 1] = x;
+    }
 }
 # endif
 
@@ -378,31 +411,36 @@ void byteAtPut(object z, int i, int x) {
  reference counts as the mark
  */
 
-void visit(register object x) {
-	int i, s;
-	object *p;
+void visit(register object x)
+{
+    int i, s;
+    object *p;
 
-	if (x && !isInteger(x)) {
-		if (++(objectTable[x >> 1].referenceCount) == 1) {
-			/* then it's the first time we've visited it, so: */
-			visit(objectTable[x >> 1].STclass);
-			s = sizeField(x);
-			if (s > 0) {
-				p = objectTable[x >> 1].memory;
-				for (i = s; i; --i)
-					visit(*p++);
-			}
-		}
-	}
+    if (x && !isInteger(x))
+    {
+        if (++(objectTable[x >> 1].referenceCount) == 1)
+        {
+            /* then it's the first time we've visited it, so: */
+            visit(objectTable[x >> 1].STclass);
+            s = sizeField(x);
+            if (s > 0)
+            {
+                p = objectTable[x >> 1].memory;
+                for (i = s; i; --i)
+                    visit(*p++);
+            }
+        }
+    }
 }
 
-int objectCount() {
-	register int i, j;
-	j = 0;
-	for (i = 0; i < ObjectTableMax; i++)
-		if (objectTable[i].referenceCount > 0)
-			j++;
-	return j;
+int objectCount()
+{
+    register int i, j;
+    j = 0;
+    for (i = 0; i < ObjectTableMax; i++)
+        if (objectTable[i].referenceCount > 0)
+            j++;
+    return j;
 }
 
 //# define intValue(x) ( (intobj = x)<0 ? intobj : (intobj>>1) )

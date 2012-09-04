@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   primitive.h
  * Author: oni
  *

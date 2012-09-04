@@ -14,10 +14,11 @@
 #include "interp.h"
 #include "filein.h"
 
-struct dummyo {
-	int di;
-	object cl;
-	short ds;
+struct dummyo
+{
+    int di;
+    object cl;
+    short ds;
 } dummyObject;
 
 /*
@@ -28,48 +29,54 @@ struct dummyo {
  The only objects with nonzero reference counts
  will be those reachable from either symbols
  */
-static int fr(FILE *fp, char *p, int s) {
-	int r;
+static int fr(FILE *fp, char *p, int s)
+{
+    int r;
 
-	r = fread(p, s, 1, fp);
-	if (r && (r != 1))
-		TTY::sysError("imageRead count error", "");
-	return r;
+    r = fread(p, s, 1, fp);
+    if (r && (r != 1))
+        TTY::sysError("imageRead count error", "");
+    return r;
 }
 
-void imageRead(FILE *fp) {
-	short i, size;
-	//object *mBlockAlloc();
+void imageRead(FILE *fp)
+{
+    short i, size;
+    //object *mBlockAlloc();
 
-	 fr(fp, (char *) &symbols, sizeof(object));
-	i = 0;
+    fr(fp, (char *) &symbols, sizeof(object));
+    i = 0;
 
-	while (fr(fp, (char *) &dummyObject, sizeof(dummyObject))) {
-		i = dummyObject.di;
+    while (fr(fp, (char *) &dummyObject, sizeof(dummyObject)))
+    {
+        i = dummyObject.di;
 
-		if ((i < 0) || (i > ObjectTableMax))
-			TTY::sysError("reading index out of range", "");
-		objectTable[i].STclass = dummyObject.cl;
-		if ((objectTable[i].STclass < 0) || ((objectTable[i].STclass >> 1)
-				> ObjectTableMax)) {
-			fprintf(stderr, "index %d\n", dummyObject.cl);
-			TTY::sysError("class out of range", "imageRead");
-		}
-		objectTable[i].size = size = dummyObject.ds;
-		if (size < 0)
-			size = ((-size) + 1) / 2;
-		if (size != 0) {
-			objectTable[i].memory = mBlockAlloc((int) size);
-			 fr(fp, (char *) objectTable[i].memory, sizeof(object)
-					* (int) size);
-		} else
-			objectTable[i].memory = (object *) 0;
-	}
+        if ((i < 0) || (i > ObjectTableMax))
+            TTY::sysError("reading index out of range", "");
+        objectTable[i].STclass = dummyObject.cl;
+        if ((objectTable[i].STclass < 0) || ((objectTable[i].STclass >> 1)
+                                             > ObjectTableMax))
+        {
+            fprintf(stderr, "index %d\n", dummyObject.cl);
+            TTY::sysError("class out of range", "imageRead");
+        }
+        objectTable[i].size = size = dummyObject.ds;
+        if (size < 0)
+            size = ((-size) + 1) / 2;
+        if (size != 0)
+        {
+            objectTable[i].memory = mBlockAlloc((int) size);
+            fr(fp, (char *) objectTable[i].memory, sizeof(object)
+               * (int) size);
+        }
+        else
+            objectTable[i].memory = (object *) 0;
+    }
 
-	/* now restore ref counts, getting rid of unneeded junk */
-	visit(symbols);
-	/* toss out the old free lists, build new ones */
-	setFreeLists();
+    /* now restore ref counts, getting rid of unneeded junk */
+    visit(symbols);
+    /* toss out the old free lists, build new ones */
+    setFreeLists();
 
 }
 
@@ -77,29 +84,34 @@ void imageRead(FILE *fp) {
  imageWrite - write out an object image
  */
 
-static void fw(FILE *fp, char *p, int s) {
-	if (fwrite(p, s, 1, fp) != 1) {
-		TTY::sysError("imageWrite size error", "");
-	}
+static void fw(FILE *fp, char *p, int s)
+{
+    if (fwrite(p, s, 1, fp) != 1)
+    {
+        TTY::sysError("imageWrite size error", "");
+    }
 }
 
-void imageWrite(FILE *fp) {
-	short i, size;
+void imageWrite(FILE *fp)
+{
+    short i, size;
 
-	fw(fp, (char *) &symbols, sizeof(object));
+    fw(fp, (char *) &symbols, sizeof(object));
 
-	for (i = 0; i < ObjectTableMax; i++) {
-		if (objectTable[i].referenceCount > 0) {
-			dummyObject.di = i;
-			dummyObject.cl = objectTable[i].STclass;
-			dummyObject.ds = size = objectTable[i].size;
-			fw(fp, (char *) &dummyObject, sizeof(dummyObject));
-			if (size < 0)
-				size = ((-size) + 1) / 2;
-			if (size != 0)
-				fw(fp, (char *) objectTable[i].memory, sizeof(object) * size);
-		}
-	}
+    for (i = 0; i < ObjectTableMax; i++)
+    {
+        if (objectTable[i].referenceCount > 0)
+        {
+            dummyObject.di = i;
+            dummyObject.cl = objectTable[i].STclass;
+            dummyObject.ds = size = objectTable[i].size;
+            fw(fp, (char *) &dummyObject, sizeof(dummyObject));
+            if (size < 0)
+                size = ((-size) + 1) / 2;
+            if (size != 0)
+                fw(fp, (char *) objectTable[i].memory, sizeof(object) * size);
+        }
+    }
 }
 
 /* i/o primitives - necessarily rather UNIX dependent;
@@ -110,91 +122,96 @@ void imageWrite(FILE *fp) {
 /* we assume this is initialized to NULL */
 static FILE *fp[MAXFILES];
 
-object ioPrimitive(int number, object *arguments) {
-	int i, j;
-	char *p, buffer[1024];
-	object returnedObject;
+object ioPrimitive(int number, object *arguments)
+{
+    int i, j;
+    char *p, buffer[1024];
+    object returnedObject;
 
-	returnedObject = nilobj;
+    returnedObject = nilobj;
 
-	i = intValue(arguments[0]);
+    i = intValue(arguments[0]);
 
-	switch (number) {
-	case 0: /* file open */
-		i = intValue(arguments[0]);
-		p = charPtr(arguments[1]);
-		if (streq(p, "stdin"))
-			fp[i] = stdin;
-		else if (streq(p, "stdout"))
-			fp[i] = stdout;
-		else if (streq(p, "stderr"))
-			fp[i] = stderr;
-		else {
-			fp[i] = fopen(p, charPtr(arguments[2]));
-		}
-		if (fp[i] == NULL)
-			returnedObject = nilobj;
-		else
-			returnedObject = newInteger(i);
-		break;
+    switch (number)
+    {
+    case 0: /* file open */
+        i = intValue(arguments[0]);
+        p = charPtr(arguments[1]);
+        if (streq(p, "stdin"))
+            fp[i] = stdin;
+        else if (streq(p, "stdout"))
+            fp[i] = stdout;
+        else if (streq(p, "stderr"))
+            fp[i] = stderr;
+        else
+        {
+            fp[i] = fopen(p, charPtr(arguments[2]));
+        }
+        if (fp[i] == NULL)
+            returnedObject = nilobj;
+        else
+            returnedObject = newInteger(i);
+        break;
 
-	case 1: /* file close - recover slot */
-		if (fp[i])
-			 fclose(fp[i]);
-		fp[i] = NULL;
-		break;
+    case 1: /* file close - recover slot */
+        if (fp[i])
+            fclose(fp[i]);
+        fp[i] = NULL;
+        break;
 
-	case 2: /* file size */
-	case 3: /* file in */
-		if (fp[i])
-			fileIn(fp[i], true);
-		break;
+    case 2: /* file size */
+    case 3: /* file in */
+        if (fp[i])
+            fileIn(fp[i], true);
+        break;
 
-	case 4: /* get character */
-		TTY::sysError("file operation not implemented yet", "");
+    case 4: /* get character */
+        TTY::sysError("file operation not implemented yet", "");
 
-	case 5: /* get string */
-		if (!fp[i])
-			break;
-		j = 0;
-		buffer[j] = '\0';
-		while (1) {
-			if (fgets(&buffer[j], 512, fp[i]) == NULL)
-				return (nilobj); /* end of file */
-			if (fp[i] == stdin) {
-				/* delete the newline */
-				j = strlen(buffer);
-				if (buffer[j - 1] == '\n')
-					buffer[j - 1] = '\0';
-			}
-			j = strlen(buffer) - 1;
-			if (buffer[j] != '\\')
-				break;
-			/* else we loop again */
-		}
-		returnedObject = newStString(buffer);
-		break;
+    case 5: /* get string */
+        if (!fp[i])
+            break;
+        j = 0;
+        buffer[j] = '\0';
+        while (1)
+        {
+            if (fgets(&buffer[j], 512, fp[i]) == NULL)
+                return (nilobj); /* end of file */
+            if (fp[i] == stdin)
+            {
+                /* delete the newline */
+                j = strlen(buffer);
+                if (buffer[j - 1] == '\n')
+                    buffer[j - 1] = '\0';
+            }
+            j = strlen(buffer) - 1;
+            if (buffer[j] != '\\')
+                break;
+            /* else we loop again */
+        }
+        returnedObject = newStString(buffer);
+        break;
 
-	case 7: /* write an object image */
-		if (fp[i])
-			imageWrite(fp[i]);
-		returnedObject = trueobj;
-		break;
+    case 7: /* write an object image */
+        if (fp[i])
+            imageWrite(fp[i]);
+        returnedObject = trueobj;
+        break;
 
-	case 8: /* print no return */
-	case 9: /* print string */
-		if (!fp[i])
-			break;
-		 fputs(charPtr(arguments[1]), fp[i]);
-		if (number == 8)
-			 fflush(fp[i]);
-		else
-			 fputc('\n', fp[i]);
-		break;
+    case 8: /* print no return */
+    case 9: /* print string */
+        if (!fp[i])
+            break;
+        fputs(charPtr(arguments[1]), fp[i]);
+        if (number == 8)
+            fflush(fp[i]);
+        else
+            fputc('\n', fp[i]);
+        break;
 
-	default:
-		TTY::sysError("unknown primitive", "filePrimitive");
-	}
+    default:
+        TTY::sysError("unknown primitive", "filePrimitive");
+    }
 
-	return (returnedObject);
+    return (returnedObject);
 }

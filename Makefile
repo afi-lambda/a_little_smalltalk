@@ -11,6 +11,9 @@ image: lsti
 	@echo Creating initial image . . .
 	./lsti stlib/*
 
+format:
+	cd src && astyle -A1 *
+
 clean:
 	@-rm -f *.o 2>/dev/null
 	@-rm lsti 2>/dev/null
