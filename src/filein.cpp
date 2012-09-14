@@ -165,7 +165,18 @@ void fileIn(FILE *fd, boolean printit)
             ; /* do nothing, get next line */
         else if ((token == binary) && streq(tokenString, "\""))
             ; /* do nothing, its a comment */
-        else if ((token == nameconst) && streq(tokenString, "Class"))
+        /* Syntax for Class and Methods definitions
+         
+         Number extend [
+           radiusToArea [
+             ^self squared * Float pi
+           ]
+           radiusToCircumference [
+             ^self * 2 * Float pi
+           ]
+         ]
+        */
+        else if ((token == nameconst) && streq(tokenString,"Class"))
             readClassDeclaration();
         else if ((token == nameconst) && streq(tokenString,"Methods"))
             readMethods(fd, printit);

@@ -19,8 +19,6 @@ static void makeInitialImage();
 
 int initial = 0; /* not making initial image */
 
-extern int objectCount();
-
 int main(int argc, char **argv)
 {
     FILE *fp;

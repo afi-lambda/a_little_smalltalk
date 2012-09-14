@@ -1,14 +1,10 @@
 = A Little Smalltalk V3 improved
 
 Based on little smalltalk v3 a very tiny implementation of a Smalltalk like
-language from Prof. Timothy Budd.
-
-The document manual.ms provides the start of a manual; needs to be
-rewritten.
+language from Prof. Timothy Budd. Below you find the document of the Smalltalk v3.
 
 Version three of Little Smalltalk was designed specifically to
-be easy to port
-to new machines and operating systems.  
+be easy to port to new machines and operating systems.  
 This document provides the basic information needed to use Version Three of
 Little Smalltalk, plus information needed by those wishing to undertake the
 job of porting the system to a new operating environment.
@@ -30,7 +26,7 @@ for anybody wishing to use the system.  In part two we give the basic
 information needed by anybody wishing to undertake the task of porting
 version three Little Smalltalk to a new machine.
 
-Getting Started
+==Getting Started
 
 How you get started depends upon what kind of system you are working on.
 Currently there are two styles of interface supported.  A line-oriented,
@@ -38,7 +34,7 @@ tty style stdin interface is available, which runs under Unix and other systems.
 There is also a window based system which runs under X-windows and on the
 Mac.
 
-The stdin/stdout interface
+===The stdin/stdout interface
 
 Using the stdin/stdout interface, there is a prompt (the ``>'' caracter)
 typed to indicate the system is waiting for input.  
@@ -62,7 +58,7 @@ Only the last expression is printed.
 7
  
  
-The windowing interface
+===The windowing interface
  
 The windowing interface is built on top of guido van rossums standard
 window package, and runs on top of systems that support standard windows.
@@ -84,7 +80,7 @@ in which you can view and edit text.  Selecting ``compile'' following the
 editing of text will attempt to compile the method.  If no errors are
 reported, the method is then available for execution.
  
-Exploring and Creating
+==Exploring and Creating
  
 This section describes how to discover information about existing objects 
 and create new objects using the Little Smalltalk
@@ -334,9 +330,9 @@ st newimage
  
 Further information on Little Smalltalk can be found in the book.
  
-New Methods, New Classes
+==New Methods, New Classes
  
-Stdin/Stdout Interface
+===Stdin/Stdout Interface
  
 New functionality can be added using the message \fBaddMethod\fP.
 When passed to an instance of \fBClass\fP, this message drops the user into
@@ -390,7 +386,7 @@ functionality for the new class.
  
 New classes can also be added using the fileIn mechanism.
  
-The Windowing Interface
+===The Windowing Interface
  
 Using the windowing interface, new classes are created by selecting the
 menu item \fIadd class\fP in the first browser window.  New Methods are
@@ -451,11 +447,7 @@ The remainder of this document contains information necessary for those
 wishing to examine or change the source code for the Little Smalltalk
 system.
  
-Finding Your Way Around
- 
- 
- 
- 
+==Finding Your Way Around
  
 In this section we describe the files that constitute version three of
 the Little Smalltalk system.
@@ -521,7 +513,7 @@ Where ever possible new code should be surrounded by \fIifdef\fP directives
 based on words defined in this manner.
 The next section describes this in more detail.
  
-Defining System Characteristics
+===Defining System Characteristics
  
 There are many ways in which compilers and operating systems differ 
 from each other.
@@ -536,7 +528,7 @@ has not previously been defined, you will need to decide which set of
 options to enable.  The next two sections contain information you may need
 in making this determination.
  
-Define Options
+===Define Options
  
 Many options are specified merely by giving or not giving a DEFINE
 statement in the file env.h.  The following table presents the meaning for
@@ -575,7 +567,7 @@ Used if the string functions (strcpy, strcat and the like) are found in
 In addition, several routines can optionally be replaced by macros for
 greater efficiency.  See the file memory.h for more information.
  
-Building an Initial Object Image
+===Building an Initial Object Image
  
 There are two programs used in the Little Smalltalk system.  The first is
 the actual bytecode interpreter.  The use of this program is described in
@@ -617,7 +609,7 @@ image.  These methods disappear after they have been executed.
  
 This file contains various test cases.
  
-Object Memory
+===Object Memory
  
 There are several datatypes, not directly supported by C, that are used in
 the Little Smalltalk system.  The first of these is the datatype byte.
@@ -633,7 +625,7 @@ machines in which a short is 16 bits, the datatype short should suffice.
 Much more information on the memory module can be found in the file
 memory.h.
  
-The Bottom End
+===The Bottom End
  
 The opposite extreme from the front end are those messages that originate
 within the Smalltalk bytecode interpreter and must be communicated to the user.
@@ -641,7 +633,7 @@ We can divide these into two different classes of communications, editing
 operations and input/output operations.  The following sections will treat
 each of these individually.
  
-Editing
+===Editing
  
 We have already mentioned that commands entered by the user are converted
 into methods, and passed to the same method compiler as all other methods.
@@ -655,7 +647,7 @@ the entire method.  So some form of update, or editing, must be
 provided.  Again, the Unix interface and the Macintosh interface solve
 this problem in radically different ways.
  
-Editing Under Unix
+===Editing Under Unix
  
 A request to edit or add a method is given by sending either the message
 \fBaddMethod\fP or \fBeditMethod:\fP to a class.  The methods for these
@@ -716,58 +708,14 @@ deletes.
  
 \fBdelete\fP
 	('rm ', name) unixCommand
- 
- 
-On MS-Dos systems this command should be changed to \fBDEL\fP.
- 
- 
-Editing on the Macintosh
- 
-The Macintosh version takes an entirely different approach to the editing
-of methods.  
-As in the Unix version, the user requests editing using the commands
-\fBeditMethod:\fP and \fBaddNewMethod\fP.  And, as in the Unix version,
-these in turn invoke a common method.
- 
-\fBaddMethod\fP
-	self doEdit: ( self printString, ': new method') text: ''
-
-
-\fBeditMethod:\fP name
-	self doEdit: (self printString, ': ', name)
-		text: (methods at: name
-				ifAbsent: ['no such method' print. \(ua nil ]) text
- 
- 
-Here, however, when the user asks to edit a method, a new \fIediting
-window\fP is created.
- 
-\fBdoEdit\fP: title \fBtext\fP: text	| w |
-	w \(<- EditWindow new; 
-		acceptTask: [ self addMethodText: w getString ] ;
-		title: title; create; print: text; showWindow
- 
- 
-The edit window is initialized with the current text of the method.
-Thereafter, the user can edit this using the standard Macintosh cut and
-paste conventions.  The user signifies they are satisfied with the result
-by entering the command \fBaccept\fP, which causes the \fIacceptTask:\fP
-block to be executed.  This block gets the text of the window (given by the
-message \fBgetString\fP) and passes it to \fBaddMethodText:\fP, which
-compiles the method, entering it in the method table if there are no
-errors.
- 
-Input/Output commands
+  
+===Input/Output commands
  
 Under the Unix system all input/output operations are performed using the
 file system and the global variables stdin, stdout and stderr.
 Thus the message \fBerror:\fP, in class \fBSmalltalk\fP, merely prints a
 message to the standard error output and exits.
- 
-The macintosh version, although using the same file routines, does not have
-any notion of standard input or standard output.  Thus error messages
-(such as from \fBerror:\fP) result in alert boxes being displayed.
- 
+  
 There are also error messages that come from inside the Smalltalk
 interpreter itself.  These are of two types, as follows:
  
@@ -783,7 +731,7 @@ compilError() and compilWarn(). These should print their arguments
 (two strings), in an appropriate location on the users screen.
 Execution continues normally after call.
  
-Primitives
+===Primitives
  
 Primitives are the means whereby actions that cannot be described directed
 in Smalltalk are performed.  In version three of the Little Smalltalk system,
@@ -805,7 +753,7 @@ such primitive, used to perform the system() call.  On the other hand,
 the Macintosh version has dozens of primitives used to implement graphics
 functions, windowing function, editing and the like.
 
-Distribution of New Implementations
+===Distribution of New Implementations
 
 The Little Smalltalk system is entirely public domain, and any user is free
 to redistribute it in any fashion they wish.  As a service to the Smalltalk
@@ -823,7 +771,7 @@ Copies of the most recent distribution can also be obtained by writing to
 this address.  In mailing out distributions, there is a small charge for
 media and mailing costs.
 
-New Features
+===New Features
 
 If you type ``smalltalk echo'' all input will be echoed (tty interface
 only).  Typing smalltalk echo again undoes this.  This is useful for

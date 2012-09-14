@@ -38,12 +38,12 @@
  256) without any trouble.  They are kept low
  to keep memory utilization down */
 
-# define codeLimit 256		/* maximum number of bytecodes permitted */
-# define literalLimit 128	/* maximum number of literals permitted */
-# define temporaryLimit 32	/* maximum number of temporaries permitted */
-# define argumentLimit 32	/* maximum number of arguments permitted */
-# define instanceLimit 32	/* maximum number of instance vars permitted */
-# define methodLimit 64		/* maximum number of methods permitted */
+# define codeLimit      256 /* maximum number of bytecodes permitted */
+# define literalLimit   256 /* maximum number of literals permitted */
+# define temporaryLimit 256 /* maximum number of temporaries permitted */
+# define argumentLimit  256 /* maximum number of arguments permitted */
+# define instanceLimit  256 /* maximum number of instance vars permitted */
+# define methodLimit    256 /* maximum number of methods permitted */
 
 boolean parseok; /* parse still ok? */
 extern char peek();
