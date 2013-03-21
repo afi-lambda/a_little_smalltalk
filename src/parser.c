@@ -96,7 +96,7 @@ void setInstanceVariables(object aClass)
 static void genCode(int value)
 {
     if (codeTop >= codeLimit)
-        TTY::compilError(selector, "too many bytecode instructions in method", "");
+        compilError(selector, "too many bytecode instructions in method", "");
     else
         codeArray[codeTop++] = value;
 }
@@ -115,7 +115,7 @@ static void genInstruction(int high, int low)
 static int genLiteral(object aLiteral)
 {
     if (literalTop >= literalLimit)
-        TTY::compilError(selector, "too many literals in method", "");
+        compilError(selector, "too many literals in method", "");
     else
     {
         literalArray[++literalTop] = aLiteral;
@@ -249,7 +249,7 @@ static int parseArray()
                     genLiteral(newFloat(-tokenFloat));
                 }
                 else
-                    TTY::compilError(selector, "negation not followed", "by number");
+                    compilError(selector, "negation not followed", "by number");
                 nextToken();
                 break;
             }
@@ -268,7 +268,7 @@ static int parseArray()
             break;
 
         default:
-            TTY::compilError(selector, "illegal text in literal array", tokenString);
+            compilError(selector, "illegal text in literal array", tokenString);
             nextToken();
             break;
         }
@@ -277,7 +277,7 @@ static int parseArray()
     if (parseok)
     {
         if (!streq(tokenString, ")"))
-            TTY::compilError(selector, "array not terminated by right parenthesis",
+            compilError(selector, "array not terminated by right parenthesis",
                              tokenString);
         else
             nextToken();
@@ -310,13 +310,13 @@ static void block()
         while (parseok && (token == binary) && streq(tokenString,":"))
         {
             if (nextToken() != nameconst)
-                TTY::compilError(selector, "name must follow colon",
+                compilError(selector, "name must follow colon",
                                  "in block argument list");
             if (++temporaryTop > maxTemporary)
                 maxTemporary = temporaryTop;
             argumentCount++;
             if (temporaryTop > temporaryLimit)
-                TTY::compilError(selector, "too many temporaries in method", "");
+                compilError(selector, "too many temporaries in method", "");
             else
             {
                 tempsym = newSymbol(tokenString);
@@ -325,7 +325,7 @@ static void block()
             nextToken();
         }
         if ((token != binary) || !streq(tokenString, "|"))
-            TTY::compilError(selector, "block argument list must be terminated",
+            compilError(selector, "block argument list must be terminated",
                              "by |");
         nextToken();
     }
@@ -347,7 +347,7 @@ static void block()
     if ((token == closing) && streq(tokenString, "]"))
         nextToken();
     else
-        TTY::compilError(selector, "block not terminated by ]", "");
+        compilError(selector, "block not terminated by ]", "");
     genInstruction(DoSpecial, StackReturn);
     codeArray[fixLocation] = codeTop + 1;
     temporaryTop = saveTemporary;
@@ -383,7 +383,7 @@ static boolean term()
             genInstruction(PushLiteral, genLiteral(newFloat(-tokenFloat)));
         }
         else
-            TTY::compilError(selector, "negation not followed", "by number");
+            compilError(selector, "negation not followed", "by number");
         nextToken();
     }
     else if (token == charconst)
@@ -412,7 +412,7 @@ static boolean term()
         if (parseok)
         {
             if ((token != closing) || !streq(tokenString, ")"))
-                TTY::compilError(selector, "Missing Right Parenthesis", "");
+                compilError(selector, "Missing Right Parenthesis", "");
             else
                 nextToken();
         }
@@ -422,7 +422,7 @@ static boolean term()
     else if ((token == binary) && streq(tokenString, "["))
         block();
     else
-        TTY::compilError(selector, "invalid expression start", tokenString);
+        compilError(selector, "invalid expression start", tokenString);
 
     return (superTerm);
 }
@@ -432,7 +432,7 @@ static void parsePrimitive()
     int primitiveNumber, argumentCount;
 
     if (nextToken() != intconst)
-        TTY::compilError(selector, "primitive number missing", "");
+        compilError(selector, "primitive number missing", "");
     primitiveNumber = tokenInteger;
     nextToken();
     argumentCount = 0;
@@ -490,10 +490,10 @@ static boolean unaryContinuation(boolean superReceiver)
         /* first check to see if it could be a temp by mistake */
         for (i = 1; i < temporaryTop; i++)
             if (streq(tokenString, temporaryName[i]))
-                TTY::compilWarn(selector, "message same as temporary:", tokenString);
+                compilWarn(selector, "message same as temporary:", tokenString);
         for (i = 1; i < argumentTop; i++)
             if (streq(tokenString, argumentName[i]))
-                TTY::compilWarn(selector, "message same as argument:", tokenString);
+                compilWarn(selector, "message same as argument:", tokenString);
         /* the next generates too many spurious messages */
         /* for (i=1; i < instanceTop; i++)
          if (streq(tokenString, instanceName[i]))
@@ -550,7 +550,7 @@ static int optimizeBlock(int instruction, boolean dopop)
             blockstat = OptimizedBlock;
         body();
         if (!streq(tokenString, "]"))
-            TTY::compilError(selector, "missing close", "after block");
+            compilError(selector, "missing close", "after block");
         nextToken();
     }
     else
@@ -760,7 +760,7 @@ static void body()
             break; /* leaving result on stack */
         else
         {
-            TTY::compilError(selector, "invalid statement ending; token is ",
+            compilError(selector, "invalid statement ending; token is ",
                              tokenString);
         }
     }
@@ -779,7 +779,7 @@ static void temporaries()
             if (++temporaryTop > maxTemporary)
                 maxTemporary = temporaryTop;
             if (temporaryTop > temporaryLimit)
-                TTY::compilError(selector, "too many temporaries in method", "");
+                compilError(selector, "too many temporaries in method", "");
             else
             {
                 tempsym = newSymbol(tokenString);
@@ -788,7 +788,7 @@ static void temporaries()
             nextToken();
         }
         if ((token != binary) || !streq(tokenString, "|"))
-            TTY::compilError(selector, "temporary list not terminated by bar", "");
+            compilError(selector, "temporary list not terminated by bar", "");
         else
             nextToken();
     }
@@ -806,7 +806,7 @@ static void messagePattern()
     {
         nextToken();
         if (token != nameconst)
-            TTY::compilError(selector,
+            compilError(selector,
                              "binary message pattern not followed by name", selector);
         argsym = newSymbol(tokenString);
         argumentName[++argumentTop] = charPtr(argsym);
@@ -820,17 +820,17 @@ static void messagePattern()
             strcat(selector, tokenString);
             nextToken();
             if (token != nameconst)
-                TTY::compilError(selector, "keyword message pattern",
+                compilError(selector, "keyword message pattern",
                                  "not followed by a name");
             if (++argumentTop > argumentLimit)
-                TTY::compilError(selector, "too many arguments in method", "");
+                compilError(selector, "too many arguments in method", "");
             argsym = newSymbol(tokenString);
             argumentName[argumentTop] = charPtr(argsym);
             nextToken();
         }
     }
     else
-        TTY::compilError(selector, "illegal message selector", tokenString);
+        compilError(selector, "illegal message selector", tokenString);
 }
 
 boolean parse(object method, const char *text, boolean savetext)

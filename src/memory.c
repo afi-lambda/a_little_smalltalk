@@ -157,7 +157,7 @@ object *mBlockAlloc(int memorySize)
         memoryBlock = (object *) calloc((unsigned) MemoryBlockSize,
                                         sizeof(object));
         if (!memoryBlock)
-            TTY::sysError("out of memory", "malloc failed");
+            sysError("out of memory", "malloc failed");
         currentMemoryPosition = 0;
     }
     objptr = (object *) &memoryBlock[currentMemoryPosition];
@@ -176,7 +176,7 @@ object allocObject(int memorySize)
     if (memorySize >= FREELISTMAX)
     {
         fprintf(stderr, "size %d\n", memorySize);
-        TTY::sysError("allocation bigger than permitted", "allocObject");
+        sysError("allocation bigger than permitted", "allocObject");
     }
 
     /* first try the free lists, this is fastest */
@@ -227,7 +227,7 @@ object allocObject(int memorySize)
         /* if we STILL don't have it then there is nothing */
         /* more we can do */
         if (!done)
-            TTY::sysError("out of objects", "alloc");
+            sysError("out of objects", "alloc");
     }
 
     /* set class and type */
@@ -285,7 +285,7 @@ void sysDecr(object z)
     if (p->referenceCount < 0)
     {
         fprintf(stderr, "object %d\n", z);
-        TTY::sysError("negative reference count", "");
+        sysError("negative reference count", "");
     }
     decr(p->STclass);
     size = p->size;
@@ -389,11 +389,11 @@ void byteAtPut(object z, int i, int x)
     byte *bp;
 
     if (isInteger(z))
-        TTY::sysError("indexing integer", "byteAtPut");
+        sysError("indexing integer", "byteAtPut");
     else if ((i <= 0) || (i > 2 * -sizeField(z)))
     {
         fprintf(stderr, "index %d size %d\n", i, sizeField(z));
-        TTY::sysError("index out of range", "byteAtPut");
+        sysError("index out of range", "byteAtPut");
     }
     else
     {

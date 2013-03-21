@@ -15,23 +15,20 @@
 #include <stdlib.h>
 #include "env.h"
 #include "memory.h"
-#include <string>
+#include <string.h>
 
 extern boolean parseok;
 
-class TTY
-{
-public:
-    /* report a fatal system error */
-    static void sysError(const char *s1, const char *s2);
+/* report a fatal system error */
+void sysError(const char *s1, const char *s2);
 
-    /* report a nonfatal system error */
-    static void sysWarn(const char *s1, const char *s2);
-    static void compilWarn(const char *selector, const char *str1, const char *str2);
-    static void compilError(const char *selector, const char *str1, const char *str2);
-    static void dspMethod(const char *cp, const char *mp);
-    static void givepause();
-    static object sysPrimitive(int number, object *arguments);
-};
+/* report a nonfatal system error */
+void sysWarn(const char *s1, const char *s2);
+void compilWarn(const char *selector, const char *str1, const char *str2);
+void compilError(const char *selector, const char *str1, const char *str2);
+void dspMethod(const char *cp, const char *mp);
+void givepause();
+object sysPrimitive(int number, object *arguments);
+
 #endif	/* TTY_H */
 

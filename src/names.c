@@ -41,7 +41,7 @@ void nameTableInsert(object dict, int hash, object key, object value)
     table = basicAt(dict, 1);
 
     if (sizeField(table) < 3)
-        TTY::sysError("attempt to insert into", "too small name table");
+        sysError("attempt to insert into", "too small name table");
     else
     {
         hash = 3 * (hash % (sizeField(table) / 3));
@@ -89,7 +89,7 @@ object hashEachElement(object dict, register int hash, int(*fun)(object))
 
     /* now see if table is valid */
     if ((tablesize = sizeField(table)) < 3)
-        TTY::sysError("system error", "lookup on null table");
+        sysError("system error", "lookup on null table");
     else
     {
         hash = 1 + (3 * (hash % (tablesize / 3)));

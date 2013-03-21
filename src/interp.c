@@ -256,7 +256,7 @@ readMethodInfo:
                 break;
 
             default:
-                TTY::sysError("unimplemented constant", "pushConstant");
+                sysError("unimplemented constant", "pushConstant");
             }
             break;
 
@@ -321,7 +321,7 @@ doFindMessage:
                     /* try again - if fail really give up */
                     if (!findMethod(&methodClass))
                     {
-                        TTY::sysWarn("can't find", "error recovery method");
+                        sysWarn("can't find", "error recovery method");
                         /* just quit */
                         return false;
                     }
@@ -349,7 +349,7 @@ doFindMessage:
                 methodClass = classField(method);
                 if (!findMethod(&methodClass))
                 {
-                    TTY::sysWarn("can't find", "watch method");
+                    sysWarn("can't find", "watch method");
                     /* just quit */
                     return false;
                 }
@@ -615,13 +615,13 @@ doReturn:
                 goto doFindMessage;
 
             default:
-                TTY::sysError("invalid doSpecial", "");
+                sysError("invalid doSpecial", "");
                 break;
             }
             break;
 
         default:
-            TTY::sysError("invalid bytecode", "");
+            sysError("invalid bytecode", "");
             break;
         }
     }

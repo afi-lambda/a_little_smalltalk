@@ -59,7 +59,7 @@ static void readClassDeclaration()
     object instanceVariables[15];
 
     if (nextToken() != nameconst)
-        TTY::sysError("bad file format", "no name in declaration");
+        sysError("bad file format", "no name in declaration");
     classObj = findClass(tokenString);
     size = 0;
     if (nextToken() == nameconst)   /* read superclass name */
@@ -98,7 +98,7 @@ static void readMethods(FILE *fd, boolean printit)
     char *cp, *eoftest, lineBuffer[LINEBUFFERSIZE];
 
     if (nextToken() != nameconst)
-        TTY::sysError("missing name", "following Method keyword");
+        sysError("missing name", "following Method keyword");
     classObj = findClass(tokenString);
     setInstanceVariables(classObj);
     if (printit)
@@ -127,7 +127,7 @@ static void readMethods(FILE *fd, boolean printit)
         }
         if (eoftest == NULL)
         {
-            TTY::sysError("unexpected end of file", "while reading method");
+            sysError("unexpected end of file", "while reading method");
             break;
         }
 
@@ -138,7 +138,7 @@ static void readMethods(FILE *fd, boolean printit)
             selector = basicAt(theMethod, messageInMethod);
             basicAtPut(theMethod, methodClassInMethod, classObj);
             if (printit)
-                TTY::dspMethod(cp, charPtr(selector));
+                dspMethod(cp, charPtr(selector));
             nameTableInsert(methTable, (int) selector, selector, theMethod);
         }
         else
@@ -146,7 +146,7 @@ static void readMethods(FILE *fd, boolean printit)
             /* get rid of unwanted method */
             incr(theMethod);
             decr(theMethod);
-            TTY::givepause();
+            givepause();
         }
 
     }
@@ -181,6 +181,6 @@ void fileIn(FILE *fd, boolean printit)
         else if ((token == nameconst) && streq(tokenString,"Methods"))
             readMethods(fd, printit);
         else
-            TTY::sysError("unrecognized line", textBuffer);
+            sysError("unrecognized line", textBuffer);
     }
 }

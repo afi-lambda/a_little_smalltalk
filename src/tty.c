@@ -17,37 +17,37 @@
 extern boolean parseok;
 
 /* report a fatal system error */
-void TTY::sysError(const char *s1, const char *s2)
+void sysError(const char *s1, const char *s2)
 {
     fprintf(stderr, "%s\n%s\n", s1, s2);
     abort();
 }
 
 /* report a nonfatal system error */
-void TTY::sysWarn(const char *s1, const char *s2)
+void sysWarn(const char *s1, const char *s2)
 {
     fprintf(stderr, "%s\n%s\n", s1, s2);
 }
 
-void TTY::compilWarn(const char *selector, const char *str1, const char *str2)
+void compilWarn(const char *selector, const char *str1, const char *str2)
 {
     fprintf(stderr, "compiler warning: Method %s : %s %s\n", selector,
             str1, str2);
 }
 
-void TTY::compilError(const char *selector, const char *str1, const char *str2)
+void compilError(const char *selector, const char *str1, const char *str2)
 {
     fprintf(stderr, "compiler error: Method %s : %s %s\n", selector,
             str1, str2);
     parseok = false;
 }
 
-void TTY::dspMethod(const char *cp, const char *mp)
+void dspMethod(const char *cp, const char *mp)
 {
     /* fprintf(stderr,"%s %s\n", cp, mp);*/
 }
 
-void TTY::givepause()
+void givepause()
 {
     char buffer[80];
 
@@ -55,7 +55,7 @@ void TTY::givepause()
     fgets(buffer, 79, stdin);
 }
 
-object TTY::sysPrimitive(int number, object *arguments)
+object sysPrimitive(int number, object *arguments)
 {
     object returnedObject;
 

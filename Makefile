@@ -1,11 +1,11 @@
-CFILES = st.cpp memory.cpp names.cpp news.cpp interp.cpp tty.cpp primitive.cpp filein.cpp lex.cpp parser.cpp unixio.cpp
+CFILES = st.c memory.c names.c news.c interp.c tty.c primitive.c filein.c lex.c parser.c unixio.c
 
-CFLAGS=-O0 -g3 -Wall -std=c++0x -I/usr/include/c++/4.6/i686-linux-gnu -I/usr/include/c++/4.6
+CFLAGS=-O0 -g3 -Wall -Werror
 
 all: image
 
 lsti:
-	g++ -o $@ $(CFLAGS) $(addprefix src/, $(CFILES)) -lm
+	gcc -o $@ $(CFLAGS) $(addprefix src/, $(CFILES)) -lm
 
 image: lsti
 	@echo Creating initial image . . .

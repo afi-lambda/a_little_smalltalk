@@ -36,6 +36,7 @@
 #include "news.h"
 #include "interp.h"
 #include "parser.h"
+#include "unistd.h"
 
 extern object processStack;
 extern int linkPointer;
@@ -94,7 +95,7 @@ static object zeroaryPrims(int number)
         exit(0);
 
     default: /* unknown primitive */
-        TTY::sysError("unknown primitive", "zeroargPrims");
+        sysError("unknown primitive", "zeroargPrims");
         break;
     }
     return (returnedObject);
@@ -178,7 +179,7 @@ static int unaryPrims(int number, object firstarg)
         break;
 
     default: /* unknown primitive */
-        TTY::sysError("unknown primitive", "unaryPrims");
+        sysError("unknown primitive", "unaryPrims");
         break;
     }
     return (returnedObject);
@@ -219,13 +220,13 @@ static int binaryPrims(int number, object firstarg, object secondarg)
 
     case 5: /* basicAt: */
         if (!isInteger(secondarg))
-            TTY::sysError("non integer index", "basicAt:");
+            sysError("non integer index", "basicAt:");
         returnedObject = basicAt(firstarg, intValue(secondarg));
         break;
 
     case 6: /* byteAt: */
         if (!isInteger(secondarg))
-            TTY::sysError("non integer index", "byteAt:");
+            sysError("non integer index", "byteAt:");
         i = byteAt(firstarg, intValue(secondarg));
         if (i < 0)
             i += 256;
@@ -256,7 +257,7 @@ static int binaryPrims(int number, object firstarg, object secondarg)
         break;
 
     default: /* unknown primitive */
-        TTY::sysError("unknown primitive", "binaryPrims");
+        sysError("unknown primitive", "binaryPrims");
         break;
 
     }
@@ -274,7 +275,7 @@ static int trinaryPrims(int number, object firstarg, object secondarg, object th
     {
     case 1: /* basicAt:Put: */
         if (!isInteger(secondarg))
-            TTY::sysError("non integer index", "basicAtPut");
+            sysError("non integer index", "basicAtPut");
         fprintf(stderr, "IN BASICATPUT %d %d %d\n", firstarg,
                 intValue(secondarg), thirdarg);
         fieldAtPut(firstarg, intValue(secondarg), thirdarg)
@@ -283,16 +284,16 @@ static int trinaryPrims(int number, object firstarg, object secondarg, object th
 
     case 2: /* basicAt:Put: for bytes */
         if (!isInteger(secondarg))
-            TTY::sysError("non integer index", "byteAtPut");
+            sysError("non integer index", "byteAtPut");
         if (!isInteger(thirdarg))
-            TTY::sysError("assigning non int", "to byte");
+            sysError("assigning non int", "to byte");
         byteAtPut(firstarg, intValue(secondarg), intValue(thirdarg));
         break;
 
     case 3: /* string copyFrom:to: */
         bp = charPtr(firstarg);
         if ((!isInteger(secondarg)) || (!isInteger(thirdarg)))
-            TTY::sysError("non integer index", "copyFromTo");
+            sysError("non integer index", "copyFromTo");
         i = intValue(secondarg);
         j = intValue(thirdarg);
         tp = buffer;
@@ -315,7 +316,7 @@ static int trinaryPrims(int number, object firstarg, object secondarg, object th
         break;
 
     default: /* unknown primitive */
-        TTY::sysError("unknown primitive", "trinaryPrims");
+        sysError("unknown primitive", "trinaryPrims");
         break;
     }
     return (returnedObject);
@@ -352,7 +353,7 @@ static int intUnary(int number, int firstarg)
         break;
 
     default:
-        TTY::sysError("intUnary primitive", "not implemented yet");
+        sysError("intUnary primitive", "not implemented yet");
     }
     return (returnedObject);
 }
@@ -483,11 +484,11 @@ static int strUnary(int number, char *firstargument)
         break;
 
     case 9:
-        TTY::sysError("fatal error", firstargument);
+        sysError("fatal error", firstargument);
         break;
 
     default:
-        TTY::sysError("unknown primitive", "strUnary");
+        sysError("unknown primitive", "strUnary");
         break;
     }
 
@@ -552,7 +553,7 @@ static int floatUnary(int number, double firstarg)
         break;
 
     default:
-        TTY::sysError("unknown primitive", "floatUnary");
+        sysError("unknown primitive", "floatUnary");
         break;
     }
 
@@ -598,7 +599,7 @@ static object floatBinary(int number, double first, double second)
         first /= second;
         break;
     default:
-        TTY::sysError("unknown primitive", "floatBinary");
+        sysError("unknown primitive", "floatBinary");
         break;
     }
 
@@ -623,7 +624,7 @@ object primitive(register int primitiveNumber, object *arguments)
     if (primitiveNumber >= 150)
     {
         /* system dependent primitives, handled in separate module */
-        returnedObject = TTY::sysPrimitive(primitiveNumber, arguments);
+        returnedObject = sysPrimitive(primitiveNumber, arguments);
     }
     else
     {
@@ -683,7 +684,7 @@ object primitive(register int primitiveNumber, object *arguments)
             break;
 
         default:
-            TTY::sysError("unknown primitive number", "doPrimitive");
+            sysError("unknown primitive number", "doPrimitive");
             break;
         }
     }

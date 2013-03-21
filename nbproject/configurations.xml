@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="84">
+<configurationDescriptor version="88">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
-    <df name="a_little_smalltalk" root=".">
+    <df root="." name="a_little_smalltalk">
       <df name="src">
         <in>env.h</in>
-        <in>filein.cpp</in>
+        <in>filein.c</in>
         <in>filein.h</in>
-        <in>interp.cpp</in>
+        <in>interp.c</in>
         <in>interp.h</in>
-        <in>lex.cpp</in>
+        <in>lex.c</in>
         <in>lex.h</in>
-        <in>memory.cpp</in>
+        <in>memory.c</in>
         <in>memory.h</in>
-        <in>names.cpp</in>
+        <in>names.c</in>
         <in>names.h</in>
-        <in>news.cpp</in>
+        <in>news.c</in>
         <in>news.h</in>
-        <in>parser.cpp</in>
+        <in>parser.c</in>
         <in>parser.h</in>
-        <in>primitive.cpp</in>
+        <in>primitive.c</in>
         <in>primitive.h</in>
-        <in>st.cpp</in>
+        <in>st.c</in>
         <in>st.h</in>
-        <in>tty.cpp</in>
+        <in>tty.c</in>
         <in>tty.h</in>
-        <in>unixio.cpp</in>
-      </df>
-      <df name="stlib">
-      </df>
-      <df name="test">
+        <in>unixio.c</in>
       </df>
     </df>
     <logicalFolder name="ExternalFiles"
@@ -66,49 +62,49 @@
           </ccTool>
         </makeTool>
       </makefileType>
-      <item path="src/filein.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-        </ccTool>
+      <item path="src/env.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/interp.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-        </ccTool>
+      <item path="src/filein.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="src/lex.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-        </ccTool>
+      <item path="src/filein.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/memory.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-        </ccTool>
+      <item path="src/interp.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="src/names.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-        </ccTool>
+      <item path="src/interp.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/news.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-        </ccTool>
+      <item path="src/lex.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="src/parser.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-        </ccTool>
+      <item path="src/lex.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/primitive.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-        </ccTool>
+      <item path="src/memory.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="src/st.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-        </ccTool>
+      <item path="src/memory.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/tty.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-        </ccTool>
+      <item path="src/names.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="src/unixio.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool>
-        </ccTool>
+      <item path="src/names.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/news.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/news.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/parser.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/parser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/primitive.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/primitive.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/st.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/st.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/tty.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/tty.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/unixio.c" ex="false" tool="0" flavor2="0">
       </item>
     </conf>
   </confs>
