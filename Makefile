@@ -7,6 +7,9 @@ all: image
 lsti:
 	gcc -o $@ $(CFLAGS) $(addprefix src/, $(CFILES)) -lm
 
+lsti.so:
+	gcc -o $@ $(CFLAGS) $(addprefix src/, $(CFILES)) -lm  -fPIC -shared
+
 image: lsti
 	@echo Creating initial image . . .
 	./lsti stlib/*
