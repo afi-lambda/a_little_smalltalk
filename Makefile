@@ -20,4 +20,6 @@ format:
 clean:
 	@-rm -f *.o 2>/dev/null
 	@-rm lsti 2>/dev/null
+	@-rm lsti.so 2>/dev/null
+	@-rm systemImage 2>/dev/null
 	
